@@ -1,0 +1,1 @@
+export { authenticateUser } from './admin/authenticateUser'
