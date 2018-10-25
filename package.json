@@ -33,6 +33,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "express": "^4.16.4",
+    "jsonwebtoken": "^8.3.0",
     "pug": "^2.0.3",
     "sequelize": "^4.41.0",
     "tslib": "~1.9.3"
