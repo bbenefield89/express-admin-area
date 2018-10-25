@@ -1,6 +1,9 @@
-import * as routes from './routes'
+const express = require('express')
 
-const adminAreaConfig = (express, app, db) => {
+import * as routes from './routes'
+import { Admin } from './models/Admin'
+
+const adminAreaConfig = (app, db) => {
   const adminArea = express.Router()
   
   // configure express to serve Handlebars as default template engine
@@ -18,6 +21,9 @@ const adminAreaConfig = (express, app, db) => {
   // routes
   adminArea.get('/', routes.authGet)
   adminArea.post('/', routes.authPost)
+
+  // create 'admin' table in database
+  Admin(db).sync()
 
   return adminArea
 }
