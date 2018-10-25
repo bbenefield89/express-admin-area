@@ -8,12 +8,16 @@ const adminAreaConfig = (express, app, db) => {
   app.set('views', __dirname + '/../../views')
   app.set('view engine', 'pug')
   
+  // configure 'express-admin-area' middleware
+  adminArea.use(express.json())
   adminArea.use((_req, res, next) => {
     res.locals.db = db
     next()
   })
-  
-  adminArea.get('/', routes.auth)
+
+  // routes
+  adminArea.get('/', routes.authGet)
+  adminArea.post('/', routes.authPost)
 
   return adminArea
 }
