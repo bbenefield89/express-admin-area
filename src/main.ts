@@ -2,14 +2,13 @@ const express = require('express')
 
 import * as routes from './routes'
 import { Admin } from './models/Admin'
+import { viewsEngineConfig } from './helpers/viewsEngineConfig'
 
 const adminAreaConfig = (app, db) => {
   const adminArea = express.Router()
   
-  // configure express to serve Handlebars as default template engine
-  app.engine('pug', require('pug').__express)
-  app.set('views', __dirname + '/../../views')
-  app.set('view engine', 'pug')
+  // configure express to serve 'Pug' as default template engine
+  viewsEngineConfig(app)
   
   // configure 'express-admin-area' middleware
   adminArea.use(express.json())
