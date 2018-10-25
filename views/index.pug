@@ -2,3 +2,30 @@ extends layouts/layout.pug
 
 block content
   h1= message
+
+  form(class="auth_form")
+    input(class="auth_form__username_input" type="text" name="username")
+    input(class="auth_form__password_input" type="password" name="password")
+    input(type='submit' value='Submit')
+
+  script.
+    const authForm = document.querySelector('.auth_form')
+
+    authForm.onsubmit = e => {
+      e.preventDefault()
+      
+      const usernameInput = document.querySelector('.auth_form__username_input')
+      const passwordInput = document.querySelector('.auth_form__password_input')
+
+      fetch('/admin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: usernameInput.value,
+          password: passwordInput.value
+        })
+      })
+        .then(data => data.json())
+        .then(data => console.log(data))
+        .catch(err => console.log(err))
+    }
