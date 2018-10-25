@@ -1,13 +1,16 @@
   /**
    * TODO: change this route to the signup/login route
    */
-  const auth = ((_req, res) => {
-    const pugVars = {
+  export const authGet = ((_req, res) => {
+    const locals = {
       message: 'Signup/Login',
       pageTitle: 'Overview'
     }
     
-    res.render('index', pugVars)
+    res.render('index', locals)
   })
 
-  export { auth }
+  export const authPost = ((req, res) => {
+    console.log(req.body)
+    res.send({ data: req.body })
+  })
