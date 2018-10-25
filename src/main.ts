@@ -1,11 +1,13 @@
 const express = require('express')
 
 import * as routes from './routes'
+import * as mwc from './controllers/'
 import { Admin } from './models/Admin'
 import { viewsEngineConfig } from './helpers/viewsEngineConfig'
 
 const adminAreaConfig = (app, db) => {
   const adminArea = express.Router()
+  const adminModel = Admin(db)
   
   // configure express to serve 'Pug' as default template engine
   viewsEngineConfig(app)
@@ -19,10 +21,10 @@ const adminAreaConfig = (app, db) => {
 
   // routes
   adminArea.get('/', routes.authGet)
-  adminArea.post('/', routes.authPost)
+  adminArea.post('/', mwc.authenticateUser(db), routes.authPost)
 
   // create 'admin' table in database
-  Admin(db).sync()
+  adminModel.sync()
 
   return adminArea
 }
