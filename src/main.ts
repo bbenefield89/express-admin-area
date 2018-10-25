@@ -1,9 +1,25 @@
-const adminArea = require('express').Router()
+const adminAreaConfig = (express, app, _db) => {
+  const adminArea = express.Router()
+  
+  // configure express to serve Handlebars as default template engine
+  app.engine('pug', require('pug').__express)
+  app.set('views', __dirname + '/../../views')
+  app.set('view engine', 'pug')
+  
+  // index/auth route
+  /**
+   * TODO: change this route to the signup/login route
+   */
+  adminArea.get('/', (_req, res) => {
+    const pugVars = {
+      message: 'ADMIN AREA',
+      pageTitle: 'Overview'
+    }
+    
+    res.render('index', pugVars)
+  })
 
-const index =  __dirname + '/views/index.html'
+  return adminArea
+}
 
-adminArea.get('/', (_req, res) => {
-  res.sendFile(index)
-})
-
-export { adminArea }
+export { adminAreaConfig }
