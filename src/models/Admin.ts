@@ -20,6 +20,14 @@ export const Admin = db => {
           len: [1, 256]
         }
       }
+    },
+    {
+      indexes: [
+        {
+          unique: true,
+          fields: ['username']
+        }
+      ]
     }
   )
 
