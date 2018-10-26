@@ -37,5 +37,8 @@
     "pug": "^2.0.3",
     "sequelize": "^4.41.0",
     "tslib": "~1.9.3"
+  },
+  "bin": {
+    "express-admin-area": "bin/cli.js"
   }
 }
