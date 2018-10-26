@@ -1,0 +1,10 @@
+extends layouts/layout.pug
+
+block content
+  h1 Admin Area Dashboard
+
+  ul
+    each tableName in tableNames
+      li
+        a(href=`${ tableName.url }/${ tableName.tableName }`)
+          h2= tableName.tableName
