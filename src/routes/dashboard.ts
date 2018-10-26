@@ -14,7 +14,7 @@ const dashboardGet = async (_req, res) => {
     }
   })
 
-  res.render('dashboard', { tableNames })
+  res.render('dashboard', { tableNames, pageTitle: 'Dashboard' })
 }
 
 export { dashboardGet }
