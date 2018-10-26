@@ -19,9 +19,15 @@ const adminAreaConfig = (app, db) => {
     next()
   })
 
-  // routes
+  /**
+   * ROUTES
+   */
+  // log in/authentication
   adminArea.get('/', routes.authGet)
   adminArea.post('/', mwc.authenticateUser(db), routes.authPost)
+
+  // dashboard - this is where users will see a list of tables from their DB
+  adminArea.get('/dashboard', routes.dashboardGet)
 
   // create 'admin' table in database
   adminModel.sync()
