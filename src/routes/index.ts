@@ -1,2 +1,3 @@
 export { authGet, authPost } from './auth'
-export { dashboardGet } from './dashboard'
+export { dashboardGet, dashboardPost } from './dashboard'
+export { tableDataGet } from './tableData'
