@@ -1,0 +1,15 @@
+extends layouts/layout.pug
+
+block content
+  h1= tableName
+
+  table
+    thead
+      tr
+        each fieldName in fieldNames
+          th= fieldName
+      tb
+        each row in rows
+          tr
+            each field, val in row
+              td= field
