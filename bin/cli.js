@@ -1,6 +1,5 @@
 #! /usr/bin/env node
 
-const shell = require('shelljs')
 const fs = require('fs')
 
 console.log(process.argv)
