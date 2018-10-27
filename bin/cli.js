@@ -104,11 +104,11 @@ const fetchAdmins = async () => {
 const installDependencies = async () => {
   try {
     const packageManager = await setPackageManager()
-    const installDepsCommand = packageManager === 'npm' ? 'npm install' : 'yarn'
+    const installDepsCommand = packageManager === 'npm' ? 'npm install ' : 'yarn add '
     
     console.log(`Installing Dependencies: ${ dbDialect }`)
 
-    cp.exec(`${ installDepsCommand } ${ dbDialect }`, (err, sout, serr) => {
+    cp.exec(installDepsCommand + dbDialect, (err, sout, serr) => {
       if (err) {
         throw new Error(err)
       }
