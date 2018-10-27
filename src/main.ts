@@ -28,6 +28,10 @@ const adminAreaConfig = (app, db) => {
 
   // dashboard - this is where users will see a list of tables from their DB
   adminArea.get('/dashboard', routes.dashboardGet)
+  adminArea.post('/dashboard', routes.dashboardPost)
+
+  // tableData - view information about individual tables
+  adminArea.get('/dashboard/:tableName', routes.tableDataGet)
 
   // create 'admin' table in database
   adminModel.sync()
