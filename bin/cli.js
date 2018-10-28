@@ -1,9 +1,5 @@
 #! /usr/bin/env node
 
-/**
- * TODO: use a promise library, bluebird or node built in util.promisify to
- *       help refactor this mess
- */
 const Sequelize = require('sequelize')
 const prompt = require('prompt')
 
