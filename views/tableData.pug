@@ -6,10 +6,65 @@ block content
   table
     thead
       tr
+        th
         each fieldName in fieldNames
-          th= fieldName
-      tb
-        each row in rows
-          tr
-            each field, val in row
-              td= field
+          if fieldName !== 'password'
+            th= fieldName
+    tbody
+      each row, ind in rows
+        tr
+          td
+            button(
+              class="delete_row_btn"
+              data-id=row.id
+              data-tablename=tableName
+              data-url=url
+            ) Delete
+            
+          each val, key in row
+            if key !== 'password'
+              td= val
+
+    script.
+      /**
+       * @summary receives a rows database ID and the table name that it is a
+       *          part of and uses these values to delete the item from the DB
+       * @param {string} id
+       * @param {string} tableName
+       * @param {string} url
+       *
+       * @method deleteRow
+       *   @summary makes AJAX call to backend passing the table name and ID
+       *            to delete the row with this.id from this.tableName
+       *   @return {void}
+       */
+      class DeleteRow {
+        constructor(id, tableName, url) {
+          this.id = id
+          this.tableName = tableName
+          this.url = url
+          this.deleteRow = this.deleteRow.bind(this)
+        }
+
+        deleteRow() {
+          fetch(this.url, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              id: this.id,
+              tableName: this.tableName
+            })
+          }).then(data => data.json())
+            .then(data => console.log(data))
+            .catch(err => console.log(err))
+        }
+      }
+
+      const deleteBtns = document.querySelectorAll('.delete_row_btn')
+
+      deleteBtns.forEach(button => {
+        const { id, tablename, url } = button.dataset
+        const deleteRow = new DeleteRow(id, tablename, url)
+
+        button.onclick = () => deleteRow.deleteRow()
+      })

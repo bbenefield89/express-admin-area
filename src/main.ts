@@ -32,6 +32,7 @@ const adminAreaConfig = (app, db) => {
 
   // tableData - view information about individual tables
   adminArea.get('/dashboard/:tableName', routes.tableDataGet)
+  adminArea.delete('/dashboard/:tableName', routes.tableDataDelete)
 
   // create 'admin' table in database
   adminModel.sync()

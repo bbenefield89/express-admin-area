@@ -8,10 +8,27 @@ const tableDataGet = async (req, res) => {
     fieldNames,
     rows,
     tableName,
-    pageTitle: tableName
+    pageTitle: tableName,
+    url: req.originalUrl
   }
   
   res.render('tableData', locals)
 }
 
-export { tableDataGet }
+const tableDataDelete = async (req, res) => {
+  const { tableName, id } = req.body
+  const { db } = res.locals
+  
+  try {
+    await db.query(`DELETE FROM ${ tableName } where id=?`, {
+      replacements: [ id ]
+    })
+
+    res.status(204).send()
+  }
+  catch(err) {
+    res.status(500).send({ error: 'Error while attempting to delete' })
+  }
+}
+
+export { tableDataGet, tableDataDelete }
