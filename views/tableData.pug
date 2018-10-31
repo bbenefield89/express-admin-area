@@ -3,16 +3,43 @@ extends layouts/layout.pug
 block content
   h1= tableName
 
+  form(
+    class="create_form"
+    action=""
+    method="POST"
+    data-url=url
+    data-tablename=tableName
+  )
+    each fieldName in fieldNames
+      if fieldName !== 'id'
+        if fieldName !== 'createdAt'
+          if fieldName !== 'updatedAt'
+            div
+              label(for=fieldName)= fieldName
+              input(
+                autocomplete="off"
+                data-fieldname=fieldName
+                name=fieldName
+                placeholder=fieldName
+                type="text"
+              )
+    
+    input(type="submit" value="Create")
+  //- form
+
   table
     thead
       tr
         th
+        th
         each fieldName in fieldNames
           if fieldName !== 'password'
             th= fieldName
+    //- thead
+
     tbody
       each row, ind in rows
-        tr
+        tr(class=`row_${ row.id }`)
           td
             button(
               class="delete_row_btn"
@@ -21,50 +48,152 @@ block content
               data-url=url
             ) Delete
             
+          td
+            a(href=`${ url }?id=${ row.id }`) Edit
+          
           each val, key in row
             if key !== 'password'
-              td= val
+              td(data-field=key)= val
+    //- tbody
+  //- table
 
-    script.
-      /**
-       * @summary receives a rows database ID and the table name that it is a
-       *          part of and uses these values to delete the item from the DB
-       * @param {string} id
-       * @param {string} tableName
-       * @param {string} url
-       *
-       * @method deleteRow
-       *   @summary makes AJAX call to backend passing the table name and ID
-       *            to delete the row with this.id from this.tableName
-       *   @return {void}
-       */
-      class DeleteRow {
-        constructor(id, tableName, url) {
-          this.id = id
-          this.tableName = tableName
-          this.url = url
-          this.deleteRow = this.deleteRow.bind(this)
-        }
-
-        deleteRow() {
-          fetch(this.url, {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              id: this.id,
-              tableName: this.tableName
-            })
-          }).then(data => data.json())
-            .then(data => console.log(data))
-            .catch(err => console.log(err))
-        }
+  script.
+    /**
+      * @summary receives a rows database ID and the table name that it is a
+      *          part of and uses these values to delete the item from the DB
+      * @param {string} id
+      * @param {Node}   domElement
+      * @param {string} tableName
+      * @param {string} url
+      *
+      * @method fromDB
+      *   @summary makes AJAX call to backend passing the table name and ID
+      *            to delete the row with this.id from this.tableName
+      *   @return {void}
+      *
+      * @method fromDom
+      *   @summary removes this DOM element from the DOM
+      *   @return {void}
+      */
+    class DeleteRow {
+      constructor(id, domElement, tableName, url) {
+        this.id = id
+        this.domElement = domElement
+        this.tableName = tableName
+        this.url = url
+        this.fromDB = this.fromDB.bind(this)
+        this.fromDOM = this.fromDOM.bind(this)
       }
 
-      const deleteBtns = document.querySelectorAll('.delete_row_btn')
+      fromDB() {
+        const { id, tableName, url } = this
+        const method = 'DELETE'
+        const headers = { 'Content-Type': 'application/json' }
+        const body = JSON.stringify({ id, tableName })
+        const request = { method, headers, body }
+        
+        fetch(url, request)
+          .catch(err => console.log(err))
+      }
 
-      deleteBtns.forEach(button => {
-        const { id, tablename, url } = button.dataset
-        const deleteRow = new DeleteRow(id, tablename, url)
+      fromDOM() {
+        this.domElement.remove()
+      }
+    }
 
-        button.onclick = () => deleteRow.deleteRow()
+    /**
+     * iterates over the node list 'deleteBtns' and sets the elements 'onclick'
+     * handler to remove that row from the DB and remove that particular
+     * element from the DOM
+     */
+    const deleteBtns = document.querySelectorAll('.delete_row_btn')
+    deleteBtns.forEach(button => {
+      const { id, tablename, url } = button.dataset
+      const tableRow = document.querySelector(`.row_${ id }`)
+      const deleteRow = new DeleteRow(id, tableRow, tablename, url)
+
+      button.onclick = () => {
+        deleteRow.fromDB()
+        deleteRow.fromDOM()
+      }
+    })
+
+    class CreateRow {
+      constructor(inputData={}, url='') {
+        this.inputData = inputData
+        this.url = url
+        this.newRowData = {}
+        this.inDB = this.inDB.bind(this)
+        this.inDOM = this.inDOM.bind(this)
+      }
+
+      inDB() {
+        fetch(this.url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(this.inputData)
+        })
+          .then(data => data.json())
+          .then(data => {
+            this.newRowData = { ...data }
+            console.log(this.newRowData)
+            
+            this.inDOM()
+          })
+          .catch(err => console.log(err))
+      }
+
+      inDOM() {
+        const tableBody = document.querySelector('tbody')
+        const newTableBodyRow = tableBody.firstChild.cloneNode(true)
+
+        const newTableBodyRowDeleteBtn = newTableBodyRow.querySelector('button')
+        newTableBodyRowDeleteBtn.dataset.id = this.newRowData.id
+
+        const newTableBodyRowAnchorTag = newTableBodyRow.querySelector('a')
+        newTableBodyRowAnchorTag.href = `admins?id=${ this.newRowData.id }`
+
+        //- shorthand syntax - starts from the 3rd index in the array
+        const [ , , ...rest ] = newTableBodyRow.children
+
+        rest.forEach(tableDataElement => {
+          tableDataElement.innerText = this.newRowData[ tableDataElement.dataset.field ]
+        })
+
+        tableBody.appendChild(newTableBodyRow)
+      }
+
+      //- inDOM() {
+      //-   const newTR = document.createElement('tr')
+      //-   const newTD = document.createElement('td')
+      //-   const newDeleteBtn = document.createElement('button')
+
+      //-   newDeleteBtn.classList.add('delete_row_btn')
+      //-   newDeleteBtn.datasrc.id = this.newRowData.id
+      //-   newDeleteBtn.datasrc.tablename = parentElement.datasrc.tablename
+      //-   newDeleteBtn.datasrc.url = url
+      //- }
+    }
+
+    const createForm = document.querySelector('.create_form')
+    createForm.onsubmit = e => {
+      e.preventDefault()
+
+      //- transform HTML 'nodelist' into a javascript array
+      const createFormInputs = [ ...createForm.querySelectorAll('[type="text"]') ]
+      const createFormInputsData = {
+        tableName: createForm.dataset.tablename
+      }
+
+      /**
+       * push the fieldnames and values from each input element in the create
+       * new data form into 'createFormInputsData' object
+       */
+      createFormInputs.forEach(({ dataset, value }) => {
+        const { fieldname } = dataset
+        createFormInputsData[ fieldname ] = value
       })
+
+      const createRow = new CreateRow(createFormInputsData, createForm.dataset.url)
+      createRow.inDB()
+    }

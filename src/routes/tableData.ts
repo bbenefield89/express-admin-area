@@ -15,6 +15,29 @@ const tableDataGet = async (req, res) => {
   res.render('tableData', locals)
 }
 
+const tableDataPost = async (req, res) => {
+  const { db } = res.locals
+  const { tableName, ...rest } = req.body
+  const fields = Object.keys(rest).join(', ') + ', "createdAt", "updatedAt"'
+  const values = Object.values(rest)
+  const valuePlaceholders = '?'.repeat(values.length).split('').join(', ') + ', CURRENT_TIMESTAMP'.repeat(2)
+  const rawSQL = `
+    BEGIN;
+
+    INSERT INTO ${ tableName } (${ fields })
+      VALUES (${ valuePlaceholders });
+
+    SELECT * FROM ${ tableName }
+      ORDER BY id DESC
+      LIMIT 1;
+
+    END;
+  `
+  const data = await db.query(rawSQL, { replacements: values })
+
+  res.send(data[0][0])
+}
+
 const tableDataDelete = async (req, res) => {
   const { tableName, id } = req.body
   const { db } = res.locals
@@ -24,11 +47,11 @@ const tableDataDelete = async (req, res) => {
       replacements: [ id ]
     })
 
-    res.status(204).send()
+    res.status(204).send({})
   }
   catch(err) {
     res.status(500).send({ error: 'Error while attempting to delete' })
   }
 }
 
-export { tableDataGet, tableDataDelete }
+export { tableDataGet, tableDataPost, tableDataDelete }

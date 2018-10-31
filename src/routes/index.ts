@@ -1,3 +1,3 @@
 export { authGet, authPost } from './auth'
 export { dashboardGet, dashboardPost } from './dashboard'
-export { tableDataGet, tableDataDelete } from './tableData'
+export { tableDataGet, tableDataPost, tableDataDelete } from './tableData'
