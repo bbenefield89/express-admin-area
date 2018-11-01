@@ -38,6 +38,21 @@ block content
     //- thead
 
     tbody
+      tr(hidden)
+        td
+          button(
+            class="delete_row_btn"
+            data-tablename=tableName
+            data-url=url
+          ) Delete
+        
+        td
+          a Edit
+
+        each val, key in rows[0]
+          if key !== 'password'
+            td(data-field=key)
+    
       each row, ind in rows
         tr(class=`row_${ row.id }`)
           td
@@ -106,17 +121,39 @@ block content
      * handler to remove that row from the DB and remove that particular
      * element from the DOM
      */
-    const deleteBtns = document.querySelectorAll('.delete_row_btn')
-    deleteBtns.forEach(button => {
-      const { id, tablename, url } = button.dataset
-      const tableRow = document.querySelector(`.row_${ id }`)
-      const deleteRow = new DeleteRow(id, tableRow, tablename, url)
+    //- const deleteBtns = document.querySelectorAll('.delete_row_btn')
+    //- deleteBtns.forEach(button => {
+    //-   const { id, tablename, url } = button.dataset
+    //-   const tableRow = document.querySelector(`.row_${ id }`)
+    //-   const deleteRow = new DeleteRow(id, tableRow, tablename, url)
 
-      button.onclick = () => {
-        deleteRow.fromDB()
-        deleteRow.fromDOM()
+    //-   button.onclick = () => {
+    //-     deleteRow.fromDB()
+    //-     deleteRow.fromDOM()
+    //-   }
+    //- })
+
+    const tableBody = document.querySelector('tbody')
+    tableBody.onclick = e => {
+      //- targets the 'Delete' btn for each specific table row
+      if (e.target.className.includes('delete_row_btn')) {
+        const { id, tablename, url } = e.target.dataset
+        const tableRow = document.querySelector(`.row_${ id }`)
+        const deleteRow = new DeleteRow(id, tableRow, tablename, url)
+
+        /**
+         * by making this onclick event an IIFE, when the user clicks on the
+         * 'delete' btn this onclick event will be automatically set on the
+         * corresponding btn
+         * without it being an IIFE we would need to click the 'delete' btn a
+         * second time for the onclick event function to run
+         */
+        e.target.onclick = (() => {
+          deleteRow.fromDB()
+          deleteRow.fromDOM()
+        })()
       }
-    })
+    }
 
     class CreateRow {
       constructor(inputData={}, url='') {
@@ -145,7 +182,10 @@ block content
 
       inDOM() {
         const tableBody = document.querySelector('tbody')
+        
         const newTableBodyRow = tableBody.firstChild.cloneNode(true)
+        newTableBodyRow.className = `row_${ this.newRowData.id }`
+        newTableBodyRow.removeAttribute('hidden')
 
         const newTableBodyRowDeleteBtn = newTableBodyRow.querySelector('button')
         newTableBodyRowDeleteBtn.dataset.id = this.newRowData.id
