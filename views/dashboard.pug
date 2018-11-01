@@ -6,5 +6,5 @@ block content
   ul
     each tableName in tableNames
       li
-        a(href=tableName.url + tableName.tableName)
+        a(href=tableName.url + '/' + tableName.tableName)
           h2= tableName.tableName
