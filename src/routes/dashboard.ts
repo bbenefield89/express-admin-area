@@ -1,15 +1,9 @@
 const dashboardGet = async (req, res) => {
-  const { db } = res.locals
-  const tables = await db.query(
-    `
-      SELECT * FROM pg_catalog.pg_tables
-      WHERE schemaname='public';
-    `
-  )
-
-  const tableNames = tables[0].map(table => {
+  const models = Object.keys(res.locals.models)
+  const tables = [ 'Admins', ...models ]
+  const tableNames = tables.map(table => {
     return {
-      tableName: table.tablename,
+      tableName: table,
       url: req.originalUrl
     }
   })
