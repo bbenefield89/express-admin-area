@@ -5,10 +5,10 @@ import * as mwc from './controllers/'
 import { Admin } from './models/Admin'
 import { viewsEngineConfig } from './helpers/viewsEngineConfig'
 
-const adminAreaConfig = (app, db) => {
+const adminAreaConfig = (app, db, models: Object) => {
   const adminArea = express.Router()
   const adminModel = Admin(db)
-  
+
   // configure express to serve 'Pug' as default template engine
   viewsEngineConfig(app)
   
@@ -16,6 +16,7 @@ const adminAreaConfig = (app, db) => {
   adminArea.use(express.json())
   adminArea.use((_req, res, next) => {
     res.locals.db = db
+    res.locals.models = models
     next()
   })
 
