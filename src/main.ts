@@ -9,6 +9,15 @@ const adminAreaConfig = (app, db, models: Object) => {
   const adminArea = express.Router()
   const adminModel = Admin(db)
 
+  /**
+   * Model names need to be lowercase to easier grab the correct model in our
+   * model-dependent routes. For an example look at the 'tableDataGet' route
+   */
+  const lowerCasedModels = {}
+  for (let modelName in models) {
+    lowerCasedModels[ modelName.toLowerCase() ] = models[ modelName ]
+  }
+
   // configure express to serve 'Pug' as default template engine
   viewsEngineConfig(app)
   
@@ -16,7 +25,7 @@ const adminAreaConfig = (app, db, models: Object) => {
   adminArea.use(express.json())
   adminArea.use((_req, res, next) => {
     res.locals.db = db
-    res.locals.models = models
+    res.locals.models = lowerCasedModels
     next()
   })
 
