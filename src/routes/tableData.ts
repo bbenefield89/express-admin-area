@@ -1,9 +1,24 @@
+import { Admin } from '../models/Admin'
+
+/**
+ * GET
+ */
 const tableDataGet = async (req, res) => {
-  const { tableName } = req.params
-  const { db } = res.locals
-  const tableData = await db.query(`SELECT * FROM ${ tableName }`)
-  const fieldNames = tableData[1].fields.map(field => field.name)
-  const rows = tableData[0]
+  const { db, models } = res.locals
+  const tableName = req.params.tableName.toLowerCase()
+  let model
+
+  if (tableName !== 'admins') {
+    model = models[ tableName ]
+  }
+  else {
+    model = Admin(db)
+  }
+  
+  const describeTableQuery = await db.queryInterface.QueryGenerator.describeTableQuery(tableName)
+  const describeTable = await db.query(describeTableQuery)
+  const rows = await model.findAll()
+  const fieldNames = describeTable[0].map(({ Field }) => Field)
   const locals = {
     fieldNames,
     rows,
@@ -15,6 +30,9 @@ const tableDataGet = async (req, res) => {
   res.render('tableData', locals)
 }
 
+/**
+ * POST
+ */
 const tableDataPost = async (req, res) => {
   const { db } = res.locals
   const { tableName, ...rest } = req.body
@@ -38,6 +56,9 @@ const tableDataPost = async (req, res) => {
   res.send(data[0][0])
 }
 
+/**
+ * DELETE
+ */
 const tableDataDelete = async (req, res) => {
   const { tableName, id } = req.body
   const { db } = res.locals

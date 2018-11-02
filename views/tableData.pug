@@ -49,9 +49,9 @@ block content
         td
           a Edit
 
-        each val, key in rows[0]
-          if key !== 'password'
-            td(data-field=key)
+        each fieldName in fieldNames
+          if fieldName !== 'password'
+            td(data-field=fieldName)
     
       each row, ind in rows
         tr(class=`row_${ row.id }`)
@@ -65,8 +65,8 @@ block content
             
           td
             a(href=`${ url }?id=${ row.id }`) Edit
-          
-          each val, key in row
+
+          each val, key in row.dataValues
             if key !== 'password'
               td(data-field=key)= val
     //- tbody
