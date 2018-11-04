@@ -1,6 +1,6 @@
 const dashboardGet = async (req, res) => {
   const models = Object.keys(res.locals.models)
-  const tables = [ 'Admins', ...models ]
+  const tables = [ ...models ]
   const tableNames = tables.map(table => {
     return {
       tableName: table,
