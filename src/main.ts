@@ -13,7 +13,7 @@ const adminAreaConfig = (app, db, models: Object) => {
    * Model names need to be lowercase to easier grab the correct model in our
    * model-dependent routes. For an example look at the 'tableDataGet' route
    */
-  const lowerCasedModels = {}
+  const lowerCasedModels = { admins: adminModel }
   for (let modelName in models) {
     lowerCasedModels[ modelName.toLowerCase() ] = models[ modelName ]
   }
@@ -44,7 +44,8 @@ const adminAreaConfig = (app, db, models: Object) => {
   adminArea.get('/dashboard/:tableName', routes.tableDataGet)
   adminArea.post('/dashboard/:tableName', routes.tableDataPost)
   adminArea.delete('/dashboard/:tableName', routes.tableDataDelete)
-
+  adminArea.put('/dashboard/:tableName', routes.tableDataPut)
+  
   // create 'admin' table in database
   adminModel.sync()
 
