@@ -1,9 +1,14 @@
 import { Admin } from '../models/Admin'
+import { rowDataGet, rowDataPut } from './rowData'
 
 /**
  * GET
  */
 const tableDataGet = async (req, res) => {
+  if (req.query.id) {
+    return rowDataGet(req, res)
+  }
+  
   const { db, models } = res.locals
   const tableName = req.params.tableName.toLowerCase()
   let model
@@ -75,4 +80,6 @@ const tableDataDelete = async (req, res) => {
   }
 }
 
-export { tableDataGet, tableDataPost, tableDataDelete }
+const tableDataPut = (req, res) => rowDataPut(req, res)
+
+export { tableDataGet, tableDataPost, tableDataDelete, tableDataPut }

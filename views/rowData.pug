@@ -1,0 +1,46 @@
+extends layouts/layout.pug
+
+block content
+  h1= row.id
+
+  form(data-url=url)
+    input(type='submit' value='Update')
+
+    each fieldVal, fieldName in row.dataValues
+      if fieldName !== 'id'
+        if fieldName !== 'password'
+          if fieldName !== 'createdAt'
+            if fieldName !== 'updatedAt'
+              label(for=fieldName)= fieldName
+              input(
+                class="row_form_input"
+                data-fieldname=fieldName
+                data-fieldval=fieldVal
+                name=fieldName
+                value=fieldVal
+              )
+
+  script.
+    const form = document.querySelector('form')
+
+    form.onsubmit = e => {
+      e.preventDefault()
+
+      const url = form.dataset.url
+      const data = {}
+      const formInputs = document.querySelectorAll('.row_form_input')
+
+      formInputs.forEach(({ dataset, value }) => {
+        const { fieldname } = dataset
+        data[ fieldname ] = value
+      })
+      
+      fetch(url, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+        .then(data => data.json())
+        .then(data => console.log(data))
+        .catch(err => console.log(err))
+    }
