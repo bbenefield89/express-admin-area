@@ -117,22 +117,11 @@ block content
     }
 
     /**
-     * iterates over the node list 'deleteBtns' and sets the elements 'onclick'
-     * handler to remove that row from the DB and remove that particular
-     * element from the DOM
+     * placing the 'onclick' event on the 'tbody' DOM element makes handling
+     * the creation of new 'delete' button elements and their corresponding
+     * 'onclick' events easier. Look into event delegation.
+     * https://davidwalsh.name/event-delegate
      */
-    //- const deleteBtns = document.querySelectorAll('.delete_row_btn')
-    //- deleteBtns.forEach(button => {
-    //-   const { id, tablename, url } = button.dataset
-    //-   const tableRow = document.querySelector(`.row_${ id }`)
-    //-   const deleteRow = new DeleteRow(id, tableRow, tablename, url)
-
-    //-   button.onclick = () => {
-    //-     deleteRow.fromDB()
-    //-     deleteRow.fromDOM()
-    //-   }
-    //- })
-
     const tableBody = document.querySelector('tbody')
     tableBody.onclick = e => {
       //- targets the 'Delete' btn for each specific table row
@@ -155,6 +144,27 @@ block content
       }
     }
 
+    /**
+     * @summary creates a new <tr> in the <tbody> by cloning a hidden <tr>
+     *          that is already in the DOM and replacing its data with the
+     *          correct data now coming back from the database for this new row
+     *
+     * @param {object} inputData
+     * @param {string} url
+     *
+     * @method inDB
+     *   @summary takes the data from 'this.inputData' and makes an AJAX
+     *            request to the backend which creates a new entry in the DB.
+     *            Afterwards, it will call the 'this.inDOM' method which
+     *            creates a new row in the DOM with the new rows data
+     *   @return {void}
+     *
+     * @method inDOM
+     *   @summary with the new row created in the DB this method will then take
+     *            the data being returned from 'this.inDB' and create a new row
+     *            in the DOM
+     *   @return {void}
+     */
     class CreateRow {
       constructor(inputData={}, url='') {
         this.inputData = inputData
@@ -202,17 +212,6 @@ block content
 
         tableBody.appendChild(newTableBodyRow)
       }
-
-      //- inDOM() {
-      //-   const newTR = document.createElement('tr')
-      //-   const newTD = document.createElement('td')
-      //-   const newDeleteBtn = document.createElement('button')
-
-      //-   newDeleteBtn.classList.add('delete_row_btn')
-      //-   newDeleteBtn.datasrc.id = this.newRowData.id
-      //-   newDeleteBtn.datasrc.tablename = parentElement.datasrc.tablename
-      //-   newDeleteBtn.datasrc.url = url
-      //- }
     }
 
     const createForm = document.querySelector('.create_form')
