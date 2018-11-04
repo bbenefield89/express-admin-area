@@ -37,7 +37,7 @@ block content
             th= fieldName
     //- thead
 
-    tbody
+    tbody(data-tablename=tableName)
       tr(hidden)
         td
           button(
@@ -201,7 +201,7 @@ block content
         newTableBodyRowDeleteBtn.dataset.id = this.newRowData.id
 
         const newTableBodyRowAnchorTag = newTableBodyRow.querySelector('a')
-        newTableBodyRowAnchorTag.href = `admins?id=${ this.newRowData.id }`
+        newTableBodyRowAnchorTag.href = `${ tableBody.dataset.tablename }?id=${ this.newRowData.id }`
 
         //- shorthand syntax - starts from the 3rd index in the array
         const [ , , ...rest ] = newTableBodyRow.children
