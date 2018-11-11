@@ -1,92 +1,108 @@
-[![TypeScript version][ts-badge]][typescript-31]
-[![Node.js version][nodejs-badge]][nodejs]
-[![APLv2][license-badge]][LICENSE]
-[![Build Status][travis-badge]][travis-ci]
-[![PRs Welcome][prs-badge]][prs]
-[![Donate][donate-badge]][donate]
+# Express Admin Area
 
-[![Watch on GitHub][github-watch-badge]][github-watch]
-[![Star on GitHub][github-star-badge]][github-star]
-[![Tweet][twitter-badge]][twitter]
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/bbenefield89/express-admin-area/pulls)
+![Version 0.2.1](https://img.shields.io/badge/Version-0.2.1-brightgreen.svg?style=flat-square)
 
-# node-typescript-boilerplate
+## The problem
+While developers tend to live in the command line that doesn't mean everyone on the team likes to. Whether this is a non-technical member of the team or even another fellow developer.
 
-Minimalistic boilerplate to jump-start a [Node.js][nodejs] project in [TypeScript][typescript] [3.1][typescript-31].
 
-What's included:
+## This solution
+Express Admin Area is a GUI in the browser for Database Administration tasks, Database Administration Interface (DBAI), that lets you and your team manage your database right from the browser.
 
-+ [TypeScript][typescript] [3.1][typescript-31],
-+ [TSLint 5][tslint] with [Microsoft rules][tslint-microsoft-contrib],
-+ [Jest][jest] unit testing and code coverage,
-+ Type definitions for Node.js v8 and Jest,
-+ [Prettier][prettier] to enforces a consistent code style (but it's optional),
-+ [NPM scripts for common operations](#available-scripts),
-+ a simple example of TypeScript code and unit test,
-+ .editorconfig for consistent file format.
+## Table of Contents
 
-## Quick start
+- [Usage](#usage)
+- [Inspiration](#inspiration)
+- [Contributors](#contributors)
+- [LICENSE](#license)
 
-This project is intended to be used with v8 (LTS Carbon) release of [Node.js][nodejs] or newer and [NPM][npm]. Make sure you have those installed. Then just type following commands:
+## Usage
+Express Admin Area is extremely simple to use. All you need to do is
+- Install it as a dependency: `yarn add express-admin-area` or `npm install express-admin area`
 
-```sh
-git clone https://github.com/jsynowiec/node-typescript-boilerplate
-cd node-typescript-boilerplate
-npm install
+- Create a super user from the command line: `yarn run express-admin-area` or `npm run express-admin-area`
+
+- Require Express Admin Area in your project and pass it a reference to your server, database using Sequelize, and an object containing the models in your database.
+
+**connection.js**
+```javascript
+/**
+ * This is our connection.js file that will handle the connection of our server
+ * layer to the database layer. Using Sequelize this is not only easily achieved
+ * but we can rest assured that our queries are also safe
+ */
+const Sequelize = require('sequelize')
+
+const db = new Sequelize('postgresql://<<username>>:<<password>>@127.0.0.1:5432/express_admin_area')
+
+module.exports = db
 ```
 
-or just download and unzip current `master` branch:
+**Electronics.js**
+```javascript
+/**
+ * Now that our server and database are connected we need to create some models
+ */
+const Sequelize = require('sequelize')
 
-```sh
-wget https://github.com/jsynowiec/node-typescript-boilerplate/archive/master.zip -O node-typescript-boilerplate
-unzip node-typescript-boilerplate.zip && rm node-typescript-boilerplate.zip
+const db = require('../connection')
+
+const Electronics = db.define(
+  'electronics',
+  {
+    name: Sequelize.STRING,
+    price: Sequelize.INTEGER
+  }
+)
+
+module.exports = Electronics
 ```
 
-Now start adding your code in the `src` and unit tests in the `__tests__` directories. Have fun and build amazing things 🚀
+**app.js**
+```javascript
+/**
+ * Lastly, after connecting our database and creating our Electronics model to store
+ * information about all of our electronics, we now need to pass this information
+ * to Express Admin Area through the adminAreaConfig method from Express Admin Area
+ */
+// our projects dependencies: express, express-admin-area
+const express = require('express')
+const { adminAreaConfig } = require('express-admin-area')
 
-### Unit tests in JavaScript
+// this is our database reference from connection.js
+const db = require('./database/connection')
+// this is our Electronics model from Electronics.js
+const Electronics = require('./database/models/Electronics')
 
-Writing unit tests in TypeScript can sometimes be troublesome and confusing. Especially when mocking dependencies and using spies.
+const app = express()
+const adminArea = adminAreaConfig(
+  app,           // pass Express Admin Area a reference of the app variable
+  db,            // pass in the database
+  {
+    Electronics  // pass in all database models
+  }
+)
 
-This is **optional**, but if you want to learn how to write JavaScript tests for TypeScript modules, read the [corresponding wiki page][wiki-js-tests].
+/**
+ * Tell Express you want to use the admin interface from Express Admin Area
+ */
+app.use('/admin', adminArea)
 
-## Available scripts
+Electronics.sync()
 
-+ `clean` - remove coverage data, Jest cache and transpiled files,
-+ `build` - transpile TypeScript to ES6,
-+ `build:watch` - interactive watch mode to automatically transpile source files,
-+ `lint` - lint source files and tests,
-+ `test` - run tests,
-+ `test:watch` - interactive watch mode to automatically re-run tests
+app.listen(3000, () => console.log('\n\nServer Online\n\n'))
 
-## Alternative
+```
 
-As an alternative to TypeScript, you can try my [Node.js Flow boilerplate][flow-boilerplate]. It's basically the same but with ES6, async/await, Flow type checking and ESLint.
+Viola, now visit `/admin` in the browser, log in, and you should be ready to manage your database from the browser.
 
-## License
-Licensed under the APLv2. See the [LICENSE](https://github.com/jsynowiec/node-typescript-boilerplate/blob/master/LICENSE) file for details.
+## Inspiration
+Django's admin interface
 
-[ts-badge]: https://img.shields.io/badge/TypeScript-3.1-blue.svg
-[nodejs-badge]: https://img.shields.io/badge/Node.js->=%208.9-blue.svg
-[nodejs]: https://nodejs.org/dist/latest-v8.x/docs/api/
-[travis-badge]: https://travis-ci.org/jsynowiec/node-typescript-boilerplate.svg?branch=master
-[travis-ci]: https://travis-ci.org/jsynowiec/node-typescript-boilerplate
-[typescript]: https://www.typescriptlang.org/
-[typescript-31]: https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-1.html
-[license-badge]: https://img.shields.io/badge/license-APLv2-blue.svg
-[license]: https://github.com/jsynowiec/node-typescript-boilerplate/blob/master/LICENSE
-[prs-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg
-[prs]: http://makeapullrequest.com
-[donate-badge]: https://img.shields.io/badge/$-support-green.svg
-[donate]: http://bit.ly/donate-js
-[github-watch-badge]: https://img.shields.io/github/watchers/jsynowiec/node-typescript-boilerplate.svg?style=social
-[github-watch]: https://github.com/jsynowiec/node-typescript-boilerplate/watchers
-[github-star-badge]: https://img.shields.io/github/stars/jsynowiec/node-typescript-boilerplate.svg?style=social
-[github-star]: https://github.com/jsynowiec/node-typescript-boilerplate/stargazers
-[twitter]: https://twitter.com/intent/tweet?text=Check%20out%20this%20Node.js%20TypeScript%20boilerplate!%20https://github.com/jsynowiec/node-typescript-boilerplate%20%F0%9F%91%8D
-[twitter-badge]: https://img.shields.io/twitter/url/https/jsynowiec/node-typescript-boilerplate.svg?style=social
-[jest]: https://facebook.github.io/jest/
-[tslint]: https://palantir.github.io/tslint/
-[tslint-microsoft-contrib]: https://github.com/Microsoft/tslint-microsoft-contrib
-[flow-boilerplate]: https://github.com/jsynowiec/node-flowtype-boilerplate
-[wiki-js-tests]: https://github.com/jsynowiec/node-typescript-boilerplate/wiki/Unit-tests-in-plain-JavaScript
-[prettier]: https://prettier.io
+## Contributors
+| [<img src="https://avatars0.githubusercontent.com/u/29239201?v=4" align="center" width=100><br><b>Brandon Benefield</b> ](https://github.com/bbenefield89) |
+|------------------------------------------------------------------------------------------------------------------------------------------------------------|
+
+## LICENSE
+MIT
