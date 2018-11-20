@@ -34,8 +34,8 @@
     "test": "jest --coverage",
     "test:watch": "jest --watch"
   },
-  "author": "Jakub Synowiec <github@jakubsynowiec.info>",
-  "license": "Apache-2.0",
+  "author": "Brandon Benefield <bsquared18@gmail.com>",
+  "license": "MIT",
   "dependencies": {
     "express": "^4.16.4",
     "jsonwebtoken": "^8.3.0",
