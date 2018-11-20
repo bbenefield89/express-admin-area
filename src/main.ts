@@ -1,7 +1,6 @@
 const express = require('express')
 
 import * as routes from './routes'
-import * as mwc from './controllers/'
 import { Admin } from './models/Admin'
 import { viewsEngineConfig } from './helpers/viewsEngineConfig'
 
@@ -33,10 +32,9 @@ const adminAreaConfig = (app, db, models: Object) => {
    * ROUTES
    */
   // log in/authentication
-  adminArea.get('/', routes.authGet)
-  adminArea.post('/', mwc.authenticateUser(db), routes.authPost)
+  routes.authRoutes(adminArea, db)
 
-  // dashboard - this is where users will see a list of tables from their DB
+  // dashboard - this is where users will see a list of tables from the DB
   adminArea.get('/dashboard', routes.dashboardGet)
   adminArea.post('/dashboard', routes.dashboardPost)
 
