@@ -31,7 +31,7 @@
     "clean": "rimraf coverage build tmp",
     "dev": "nodemon server/app.js",
     "lint": "tslint -t stylish --project \"tsconfig.json\"",
-    "test": "jest --coverage",
+    "test": "jest",
     "test:watch": "jest --watch"
   },
   "author": "Brandon Benefield <bsquared18@gmail.com>",
