@@ -11,7 +11,7 @@
     "@types/node": "~8.10.30",
     "jest": "~23.6.0",
     "mysql2": "^1.6.1",
-    "nodemon": "^1.18.4",
+    "nodemon": "^1.18.8",
     "pg": "^7.6.0",
     "pg-hstore": "^2.3.2",
     "prettier": "1.14.3",
@@ -37,6 +37,7 @@
   "author": "Brandon Benefield <bsquared18@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@types/express": "^4.16.0",
     "express": "^4.16.4",
     "jsonwebtoken": "^8.3.0",
     "prompt": "^1.0.0",
