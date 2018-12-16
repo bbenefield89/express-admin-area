@@ -21,7 +21,7 @@ Express Admin Area is a GUI in the browser for Database Administration tasks, Da
 Express Admin Area is extremely simple to use. All you need to do is
 - Install it as a dependency: `yarn add express-admin-area` or `npm install express-admin area`
 
-- Create a super user from the command line: `yarn run express-admin-area` or `npm run express-admin-area`
+- [Create a super user from the command line](https://asciinema.org/a/Dp11oZs8K0vf6Xqg2J1ord2zi): `yarn run express-admin-area <<full database url>>` or `npm run express-admin-area <<full database url>>`.
 
 - Require Express Admin Area in your project and pass it a reference to your server, database using Sequelize, and an object containing the models in your database.
 
