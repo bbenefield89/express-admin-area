@@ -30,7 +30,7 @@ const getAdminInfo = async () => {
  */
 const createNewAdmin = async () => {
   try {
-    const db = new Sequelize(process.argv[2])
+    const db = new Sequelize(process.argv[2], { operatorsAliases: false })
     const admin = await Admin(db)
     const adminInfo = await getAdminInfo()
     const { username } = await admin.create(adminInfo)
