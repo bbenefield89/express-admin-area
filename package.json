@@ -6,6 +6,10 @@
   "engines": {
     "node": ">= 8.9.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bbenefield89/express-admin-area"
+  },
   "devDependencies": {
     "@types/jest": "~23.3.2",
     "@types/node": "~8.10.30",
