@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt')
 const process = require('process')
 const prompt = require('prompt')
 const Sequelize = require('sequelize')
@@ -29,6 +30,7 @@ async function tryToCreateNewAdmin() {
   const database = new Sequelize(databaseUrl, databaseConfig)
   const adminModel = await Admin(database)
   const adminInfo = await getAdminInfo()
+  console.log(adminInfo)
   const { username } = await adminModel.create(adminInfo)
   logToConsoleAdminWasSuccessfullyCreated(username)
 }
@@ -40,14 +42,16 @@ async function tryToCreateNewAdmin() {
  */
 async function getAdminInfo() {
   prompt.start()
-  return await askUserForSuperUserCredentials()
+  let superUserCredentials = await askUserForSuperUserCredentials()
+  superUserCredentials.password = await hashSuperUsersPassword(superUserCredentials.password)
+  return superUserCredentials
 }
 
 /**
  * @summary asks user for the SuperUsers username and password (credentials)
  * @return {Promise}
  */
-function askUserForSuperUserCredentials() {
+async function askUserForSuperUserCredentials() {
   return new Promise((res, rej) => {
     prompt.get(['username', 'password'], (err, response) => {
       if (err) {
@@ -55,6 +59,23 @@ function askUserForSuperUserCredentials() {
       }
   
       res(response)
+    })
+  })
+}
+
+/**
+ * @summary takes a plain text password and applies a salt/hash to it using the
+ *          bcrypt library
+ * @return {Promise}
+ */
+function hashSuperUsersPassword(superUserPassword) {
+  return new Promise((res, rej) => {
+    bcrypt.hash(superUserPassword, 10, (err, hashedPassword) => {
+      if (err) {
+        rej(err)
+      }
+  
+      res(hashedPassword)
     })
   })
 }
