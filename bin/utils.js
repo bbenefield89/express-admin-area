@@ -30,7 +30,6 @@ async function tryToCreateNewAdmin() {
   const database = new Sequelize(databaseUrl, databaseConfig)
   const adminModel = await Admin(database)
   const adminInfo = await getAdminInfo()
-  console.log(adminInfo)
   const { username } = await adminModel.create(adminInfo)
   logToConsoleAdminWasSuccessfullyCreated(username)
 }
