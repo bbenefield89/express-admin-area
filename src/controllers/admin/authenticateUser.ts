@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt')
+
 import { Admin } from '../../models/Admin'
 
 /**
@@ -9,22 +11,29 @@ export const authenticateUser = db => {
   return (async (req, res, next) => {
     const { username, password } = req.body
     const admin = await adminModel.findOne({ where: { username }})
+    res.locals.admin = { error: 'Either the username or password is incorrect.' }
 
     if (admin) {
-      if (password === admin.password) {
-        // remove 'password' from the admin being returned
-        const { password, ...authedAdmin } = admin.dataValues
-
-        res.locals.admin = authedAdmin
-      }
-      else {
-        res.locals.admin = { error: 'WRONG PASSWORD' }
-      }
-    }
-    else {
-      res.locals.admin = { error: 'USERNAME NOT FOUND' }
+      await compareProvidedAndSavedAdminPasswords(password, admin, res)
     }
 
     next()
   })
+}
+
+function compareProvidedAndSavedAdminPasswords(plainTextPw, adminInfo, res) {
+  return bcrypt.compare(plainTextPw, adminInfo.password)
+    .then(passwordsAreSame => {
+      if (passwordsAreSame) {
+        saveAdminToLocals(adminInfo, res)
+      }
+    })
+    .catch(err => {
+      throw new Error(err)
+    })
+}
+
+function saveAdminToLocals(adminInfo, res) {
+  const { password, ...admin } = adminInfo.dataValues
+  res.locals.admin = admin
 }
