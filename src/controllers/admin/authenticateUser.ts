@@ -1,17 +1,15 @@
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 import { Admin } from '../../models/Admin'
 
-/**
- * TODO: fix error handling/make error messages more generalized
- */
 export const authenticateUser = db => {
   const adminModel = Admin(db)
   
   return (async (req, res, next) => {
     const { username, password } = req.body
     const admin = await adminModel.findOne({ where: { username }})
-    res.locals.admin = { error: 'Either the username or password is incorrect.' }
+    res.locals.token = { error: 'Either the username or password is incorrect.' }
 
     if (admin) {
       await compareProvidedAndSavedAdminPasswords(password, admin, res)
@@ -23,9 +21,10 @@ export const authenticateUser = db => {
 
 function compareProvidedAndSavedAdminPasswords(plainTextPw, adminInfo, res) {
   return bcrypt.compare(plainTextPw, adminInfo.password)
-    .then(passwordsAreSame => {
+    .then(async (passwordsAreSame) => {
       if (passwordsAreSame) {
-        saveAdminToLocals(adminInfo, res)
+        const { password, ...admin } = adminInfo.dataValues
+        res.locals.token =  await createJwtFromAdmin(admin)
       }
     })
     .catch(err => {
@@ -33,7 +32,18 @@ function compareProvidedAndSavedAdminPasswords(plainTextPw, adminInfo, res) {
     })
 }
 
-function saveAdminToLocals(adminInfo, res) {
-  const { password, ...admin } = adminInfo.dataValues
-  res.locals.admin = admin
+function createJwtFromAdmin(adminInfo) {
+  return new Promise((res, _rej) => {
+    const options = {
+      expiresIn: '1d'
+    }
+
+    jwt.sign(adminInfo, 'shhh', options, (err, response) => {
+      if (err) {
+        throw new Error(err)
+      }
+
+      res(response)
+    })
+  })
 }
