@@ -11,6 +11,6 @@ export const authGet = ((_req, res) => {
 })
 
 export const authPost = ((_req, res) => {
-  const { admin } = res.locals
-  res.send({ data: admin })
+  const { token } = res.locals
+  res.send({ data: token })
 })
