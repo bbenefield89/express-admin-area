@@ -13,12 +13,12 @@ block content
 
   script.
     const authForm = document.querySelector('.auth_form')
+    const usernameInput = document.querySelector('.auth_form__username_input')
+    const passwordInput = document.querySelector('.auth_form__password_input')
 
     authForm.onsubmit = e => {
       e.preventDefault()
       
-      const usernameInput = document.querySelector('.auth_form__username_input')
-      const passwordInput = document.querySelector('.auth_form__password_input')
       const data = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -30,18 +30,27 @@ block content
       authenticateAdmin(data)
     }
 
-    function authenticateAdmin(fetchData) {
-      fetch('/admin', fetchData)
-        .then(data => data.json())
-        .then(({ data }) => {
-          if (!data.error) {
-            goToDatabaseDashboard()
-          }
-          else {
-            showAuthenticationErrorMessage(data.error)
-          }
-        })
-        .catch(err => console.log(err))
+    async function authenticateAdmin(fetchData) {
+      try {
+        const loginAttemptObj = await fetch('/admin', fetchData)
+        const loginAttemptData = await loginAttemptObj.json()
+        checkForErrorsWhenLoggingIn(loginAttemptData.data)
+        saveJwtToLocalStorage(loginAttemptData.data)
+      }
+      catch (err) {
+        throw new Error(err)
+      }
+    }
+
+    function checkForErrorsWhenLoggingIn(loginInformation) {
+      if (loginInformation.hasOwnProperty('error')) {
+        showAuthenticationErrorMessage(loginInformation.error)
+        throw new Error('Invalid credentials provided.')
+      }
+    }
+
+    function saveJwtToLocalStorage(token) {
+      localStorage.setItem('token', token)
     }
 
     function goToDatabaseDashboard() {
