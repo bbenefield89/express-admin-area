@@ -22,5 +22,8 @@
   "include": [
     "src/**/*",
     "__tests__/**/*"
+  ],
+  "exclude": [
+    "src/views"
   ]
 }
