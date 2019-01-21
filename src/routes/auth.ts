@@ -7,7 +7,7 @@ export const authGet = ((_req, res) => {
     pageTitle: 'Overview'
   }
   
-  res.render('index', locals)
+  res.send()
 })
 
 export const authPost = ((_req, res) => {
