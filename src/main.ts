@@ -1,7 +1,7 @@
 import * as routes from './routes'
 import { Admin } from './models/Admin'
 
-const adminAreaConfig = (express, _app, db, models: Object) => {
+const adminAreaConfig = (express, db, models: Object) => {
   const adminArea = express.Router()
   const adminModel = Admin(db)
 
@@ -27,7 +27,7 @@ const adminAreaConfig = (express, _app, db, models: Object) => {
    * ROUTES
    */
   // log in/authentication
-  routes.authRoutes(adminArea, db)
+  // routes.authRoutes(adminArea, db)
 
   // dashboard - this is where users will see a list of tables from the DB
   adminArea.get('/dashboard', routes.dashboardGet)
