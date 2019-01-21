@@ -1,10 +1,7 @@
-const express = require('express')
-
 import * as routes from './routes'
 import { Admin } from './models/Admin'
-import { viewsEngineConfig } from './helpers/viewsEngineConfig'
 
-const adminAreaConfig = (app, db, models: Object) => {
+const adminAreaConfig = (express, _app, db, models: Object) => {
   const adminArea = express.Router()
   const adminModel = Admin(db)
 
@@ -17,9 +14,6 @@ const adminAreaConfig = (app, db, models: Object) => {
     lowerCasedModels[ modelName.toLowerCase() ] = models[ modelName ]
   }
 
-  // configure express to serve 'Pug' as default template engine
-  viewsEngineConfig(app)
-  
   // configure 'express-admin-area' middleware
   adminArea.use(express.json())
   adminArea.use((_req, res, next) => {
@@ -27,6 +21,7 @@ const adminAreaConfig = (app, db, models: Object) => {
     res.locals.models = lowerCasedModels
     next()
   })
+  adminArea.use('/expressadminarea', express.static(__dirname + '/views'))
 
   /**
    * ROUTES
