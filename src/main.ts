@@ -1,3 +1,4 @@
+import RoutesController from './controllers/RoutesController'
 import * as routes from './routes'
 import { Admin } from './models/Admin'
 
@@ -21,11 +22,20 @@ const adminAreaConfig = (express, db, models: Object) => {
     res.locals.models = lowerCasedModels
     next()
   })
+  adminArea.use((req, res, next) => {
+    const http = req.protocol
+    const domainName = req.get('host')
+    res.locals.baseUrl = `${ http }://${ domainName }/expressadminarea`
+    next()
+  })
   adminArea.use('/expressadminarea', express.static(__dirname + '/views'))
 
   /**
    * ROUTES
    */
+  // baseUrl
+  RoutesController.registerAllRoutes(adminArea)
+  
   // log in/authentication
   // routes.authRoutes(adminArea, db)
 
