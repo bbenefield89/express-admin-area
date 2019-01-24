@@ -1,3 +1,3 @@
-const expressAdminArea = require('./build/src/main')
+const { ExpressAdminArea } = require('./build/src/main')
 
-module.exports = expressAdminArea
+module.exports = ExpressAdminArea
