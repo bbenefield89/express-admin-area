@@ -1,28 +1,61 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
+import AdminLogin from './components/AdminLogin/AdminLogin'
+
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
+
+  state = {
+    baseUrl: ''
   }
+  
+  render() {
+    this.handleCheckIfAdminJwtIsSet()
+    
+    return (
+      <AdminLogin />
+    )
+  }
+
+  /**
+   * componentDidMount
+   */
+  componentDidMount() {
+    this.handleSetServerBaseUrl()
+  }
+  
+  /**
+   * handleCheckIfAdminJwtIsSet
+   */
+  handleCheckIfAdminJwtIsSet = (): void => {
+    const adminJwt = localStorage.getItem('token')
+    const currentUrlEqualsServersBaseUrl = (window.location.href === this.state.baseUrl + '/')
+    if (adminJwt) {
+      if (currentUrlEqualsServersBaseUrl) {
+        window.location.href = `${ this.state.baseUrl }/dashboard`
+      }
+    }
+  }
+
+  /**
+   * handleSetServerBaseUrl
+   */
+  handleSetServerBaseUrl = (): void => {
+    this.handleFetchBaseUrl()
+  }
+
+  /**
+   * handleFetchBaseUrl
+   */
+  handleFetchBaseUrl = (): void => {
+    fetch('/expressadminarea/baseurl')
+      .then(data => data.json())
+      .then(({ data }) => {
+        this.setState({ baseUrl: data })
+      })
+      .catch(() => console.log('\n\nError: "App.tsx (handleFetchBaseUrl)"'))
+  }
+  
 }
 
 export default App;
