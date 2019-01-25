@@ -1,9 +1,10 @@
-import BaseUrlController from './BaseUrlController/BaseUrlController'
 import AuthenticateAdminController from './AuthenticateAdminController/AuthenticateAdminController'
+import AuthenticateAdminService from '../services/AuthenticateAdminService/AuthenticateAdminService'
+import BaseUrlController from './BaseUrlController/BaseUrlController'
 
 class RoutesController {
 
-    static expressAdminArea: string = '/expressadminarea'
+  static expressAdminArea: string = '/expressadminarea'
 
   public static registerAllRoutes(router: any): void {
     // GET: 'expressadminarea/baseurl'
@@ -17,13 +18,13 @@ class RoutesController {
   }
 
   private static registerAuthenticateAdminRoutes(router: any): void {
-    router.get(
+    router.post(
       `${ RoutesController.expressAdminArea }/authenticateadmin`,
+      AuthenticateAdminService.authenticateAdmin,
       AuthenticateAdminController.getAdminJwt
     )
   }
 
 }
 
-// export { authenticateUser } from './admin/authenticateUser';
 export default RoutesController
