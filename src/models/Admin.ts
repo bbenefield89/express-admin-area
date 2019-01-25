@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize'
 
-export const Admin = db => {
+const Admin = db => {
   const adminModel = db.define(
     'admins',
     {
@@ -33,3 +33,5 @@ export const Admin = db => {
 
   return adminModel
 }
+
+export default Admin
