@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
-import { Admin } from '../../models/Admin'
+import Admin from '../../models/Admin'
 
 export const authenticateUser = db => {
   const adminModel = Admin(db)
