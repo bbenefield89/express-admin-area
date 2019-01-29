@@ -17,15 +17,14 @@ class ExpressAdminArea {
     ExpressAdminArea.router = express.Router()
     ExpressAdminArea.databaseConnection = new Sequelize(databaseUri)
     ExpressAdminArea.databaseTables = databaseTables
-    ExpressAdminArea.registerGlobalMiddlewares()
-    RoutesController.registerAllRoutes(ExpressAdminArea.router)
-
+    ExpressAdminArea.registerMiddleware()
     return ExpressAdminArea.router
   }
 
-  private static registerGlobalMiddlewares(): void {
+  private static registerMiddleware(): void {
     ExpressAdminArea.allowContentTypeApplicationJson()
     ExpressAdminArea.registerGlobalVariables()
+    RoutesController.registerAllRoutes(ExpressAdminArea.router)
     ExpressAdminArea.registerViewsLocation()
   }
 
@@ -38,19 +37,19 @@ class ExpressAdminArea {
       const http = req.protocol
       const domainName = req.get('host')
       res.locals.baseUrl = `${ http }://${ domainName }/expressadminarea`
-      res.locals.databaseConnection = ExpressAdminArea.databaseConnection
-      
+      res.locals.databaseConnection  = ExpressAdminArea.databaseConnection
       next()
     })
   }
 
   private static registerViewsLocation() {
-    ExpressAdminArea.router.use('/expressadminarea', ExpressAdminArea.express.static(__dirname + '/views'))
+    const pathToViews = __dirname + '/views'
+    const serveStaticFiles = ExpressAdminArea.express.static(pathToViews)
+    ExpressAdminArea.router.use('/expressadminarea', serveStaticFiles)
+    ExpressAdminArea.router.use('/expressadminarea/?*', serveStaticFiles)
   }
 
-  public static registerAllRoutes(): void {
-    //
-  }
+  public static registerAllRoutes(): void {}
 
 }
 
