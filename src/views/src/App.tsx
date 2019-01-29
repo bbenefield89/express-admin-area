@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import { Route } from 'react-router-dom'
 
 import AdminLogin from './components/AdminLogin/AdminLogin'
 
@@ -11,9 +12,10 @@ class App extends Component {
   
   render() {
     this.handleCheckIfAdminJwtIsSet()
-    
     return (
-      <AdminLogin />
+      <React.Fragment>
+        <Route exact path='/' component={ AdminLogin } />
+      </React.Fragment>
     )
   }
 
