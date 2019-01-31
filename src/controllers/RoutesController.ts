@@ -4,27 +4,32 @@ import BaseUrlController from './BaseUrlController/BaseUrlController'
 
 class RoutesController {
 
-  static expressAdminArea: string = '/expressadminarea'
+  private static expressAdminArea: string = '/expressadminarea'
+  private static router;
 
   public static registerAllRoutes(router: any): void {
+    this.setRouter(router)
     // GET: 'expressadminarea/baseurl'
-    RoutesController.registerBaseUrlRoutes(router)
+    this.registerBaseUrlRoutes()
     // GET: 'expressadminarea/authenticateadmin'
-    RoutesController.registerAuthenticateAdminRoutes(router)
+    this.registerAuthenticateAdminRoutes()
   }
 
-  private static registerBaseUrlRoutes(router: any): void {
-    router.get(`${ RoutesController.expressAdminArea }/baseurl`, BaseUrlController.getDomainName)
+  private static registerBaseUrlRoutes(): void {
+    this.router.get(`${ this.expressAdminArea }/baseurl`, BaseUrlController.getDomainName)
   }
 
-  private static registerAuthenticateAdminRoutes(router: any): void {
-    router.post(
-      `${ RoutesController.expressAdminArea }/authenticateadmin`,
+  private static registerAuthenticateAdminRoutes(): void {
+    this.router.post(`${ this.expressAdminArea }/authenticateadmin`,
       AuthenticateAdminService.authenticateAdmin,
       AuthenticateAdminController.getAdminJwt
     )
   }
 
+  private static setRouter(router) {
+    this.router = router
+  }
+  
 }
 
 export default RoutesController
