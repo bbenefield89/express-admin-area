@@ -1,4 +1,4 @@
-import { Admin } from '../models/Admin'
+import Admin from '../models/Admin'
 import { rowDataGet, rowDataPut } from './rowData'
 
 /**
