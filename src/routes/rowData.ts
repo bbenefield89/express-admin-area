@@ -3,7 +3,7 @@
  */
 const rowDataGet = async (req, res) => {
   const { id } = req.query
-  const { db, models } = res.locals
+  const { models } = res.locals
   const tableName = req.params.tableName.toLowerCase()
   const model = models[ tableName ]
   const row = await model.findById(id)

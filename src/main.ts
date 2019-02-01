@@ -1,53 +1,27 @@
-const express = require('express')
+import * as Sequelize from 'sequelize'
 
-import * as routes from './routes'
-import { Admin } from './models/Admin'
-import { viewsEngineConfig } from './helpers/viewsEngineConfig'
+import RoutesController from './controllers/RoutesController'
+import MiddlewareRegisterer from './middlewares/MiddlewareRegisterer/MiddlewareRegisterer'
+import ViewRegisterer from './middlewares/ViewRegisterer/ViewRegisterer'
 
-const adminAreaConfig = (app, db, models: Object) => {
-  const adminArea = express.Router()
-  const adminModel = Admin(db)
+class ExpressAdminArea {
 
-  /**
-   * Model names need to be lowercase to easier grab the correct model in our
-   * model-dependent routes. For an example look at the 'tableDataGet' route
-   */
-  const lowerCasedModels = { admins: adminModel }
-  for (let modelName in models) {
-    lowerCasedModels[ modelName.toLowerCase() ] = models[ modelName ]
+  private static express;
+  private static router;
+  private static databaseConnection;
+  private static databaseTables;
+  
+  public static init(express, databaseUri: string, databaseTables: object) {
+    this.express = express
+    this.router = express.Router()
+    this.databaseConnection = new Sequelize(databaseUri)
+    this.databaseTables = databaseTables
+    MiddlewareRegisterer.registerMiddlewares(this)
+    RoutesController.registerAllRoutes(this.router)
+    ViewRegisterer.registerViews(this)
+    return this.router
   }
 
-  // configure express to serve 'Pug' as default template engine
-  viewsEngineConfig(app)
-  
-  // configure 'express-admin-area' middleware
-  adminArea.use(express.json())
-  adminArea.use((_req, res, next) => {
-    res.locals.db = db
-    res.locals.models = lowerCasedModels
-    next()
-  })
-
-  /**
-   * ROUTES
-   */
-  // log in/authentication
-  routes.authRoutes(adminArea, db)
-
-  // dashboard - this is where users will see a list of tables from the DB
-  adminArea.get('/dashboard', routes.dashboardGet)
-  adminArea.post('/dashboard', routes.dashboardPost)
-
-  // tableData - view information about individual tables
-  adminArea.get('/dashboard/:tableName', routes.tableDataGet)
-  adminArea.post('/dashboard/:tableName', routes.tableDataPost)
-  adminArea.delete('/dashboard/:tableName', routes.tableDataDelete)
-  adminArea.put('/dashboard/:tableName', routes.tableDataPut)
-  
-  // create 'admin' table in database
-  adminModel.sync()
-
-  return adminArea
 }
 
-export { adminAreaConfig }
+export { ExpressAdminArea }
