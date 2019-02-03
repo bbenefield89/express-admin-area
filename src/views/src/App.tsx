@@ -3,13 +3,14 @@ import { Route } from 'react-router-dom'
 
 import AdminLogin from './components/AdminLogin/AdminLogin'
 import Dashboard from './components/Dashboard/Dashboard'
+import Navigation from './components/Navigation/Navigation';
 
 import './App.css';
 
 type State = { baseUrl: String }
-class App extends Component<Object, State> {
+class App extends Component<any, State> {
 
-  state = {
+  public state = {
     baseUrl: ''
   }
   
@@ -19,20 +20,13 @@ class App extends Component<Object, State> {
   render(): any  {
     return (
       <React.Fragment>
-        <nav>
-          <button onClick={ this.adminLogOut }>Log Out</button>
-        </nav>
-        <Route exact path='/' render={ props => this.renderAdminLoginComponent(props) } />
+        <Route path='/' render={ (props: any): any => <Navigation { ...props } /> } />
+        <Route exact path='/' render={ (props: any): any => this.renderAdminLoginComponent(props) } />
         <Route path='/dashboard' component={ Dashboard } />
       </React.Fragment>
     )
   }
 
-  public adminLogOut = (): void => {
-    localStorage.removeItem('token')
-    window.location.href = '/expressadminarea'
-  }
-  
   /**
    * componentDidMount
    */
@@ -77,7 +71,7 @@ class App extends Component<Object, State> {
    * redirectUserToDashboard
    */
   private redirectUserToDashboard = (): void => {
-    window.location.href = `${ this.state.baseUrl }/dashboard`
+    this.props.history.push('/dashboard')
   }
 
   /**
