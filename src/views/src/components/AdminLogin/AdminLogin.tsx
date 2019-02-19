@@ -1,11 +1,23 @@
 import React, { Component } from 'react'
 
-class AdminLogin extends Component {
-  
-  state = {
+type Props = {
+  checkIfAdminJwtIsSet: Function
+}
+class AdminLogin extends Component<Props> {
+
+  public state = {
     username: '',
     password: '',
     errorText: '',
+  }
+
+  private fetchOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      username: '',
+      password: ''
+    })
   }
 
   render() {
@@ -42,34 +54,41 @@ class AdminLogin extends Component {
   /**
    * handleSubmitAdminLoginForm
    */
-  handleSubmitAdminLoginForm = (e: any): void => {
+  private handleSubmitAdminLoginForm = async (e: any): Promise<void> => {
     e.preventDefault()
+    this.setFetchOptionsBodyProperty()
+    const { data } = await this.authenticateAdmin()
+    if (data.error) {
+      await this.setErrorText(data)
+    }
+    else {
+      this.setAdminAuthenticationTokenInLocalStorage(data)
+      this.props.checkIfAdminJwtIsSet()
+    }
+  }
 
-    fetch('/expressadminarea/authenticateadmin', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        username: this.state.username,
-        password: this.state.password
-      })
-    })
+  private setFetchOptionsBodyProperty: Function = (): void => {
+    const { username, password }: { username: string, password: string } = this.state
+    this.fetchOptions.body = JSON.stringify({username, password })
+  }
+
+  private authenticateAdmin = (): Promise<any> => {
+    return fetch('/expressadminarea/api/authenticateadmin', this.fetchOptions)
       .then(data => data.json())
-      .then(({ data }) => {
-        if (data.error) {
-          this.setState({ errorText: data.error })
-          throw new Error(data.error)
-        }
+  }
 
-        console.log(data)
-        localStorage.setItem('token', data)
-      })
-      .catch(err => console.log(err))
+  private setErrorText = (fetchResponse: any): void => {
+    this.setState({ errorText: fetchResponse.error })
+  }
+
+  private setAdminAuthenticationTokenInLocalStorage = (token: string): void => {
+    localStorage.setItem('token', token)
   }
 
   /**
    * handleUpdateInputField
    */
-  handleUpdateInputField = (e: any): void => {
+  private handleUpdateInputField = (e: any): void => {
     this.setState({ [e.target.name]: e.target.value })
   }
   
