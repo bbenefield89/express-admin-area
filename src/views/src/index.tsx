@@ -3,11 +3,11 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, Route } from 'react-router-dom'
 
 ReactDOM.render(
   <BrowserRouter basename='/expressadminarea'>
-    <App />
+    <Route path='/' render={ (props: any): any => <App { ...props } /> } />
   </BrowserRouter>,
   document.getElementById('root')
 );
