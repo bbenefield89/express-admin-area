@@ -1,3 +1,4 @@
+import { Router } from 'express';
 import * as Sequelize from 'sequelize'
 
 import RoutesController from './controllers/RoutesController'
@@ -7,11 +8,11 @@ import ViewRegisterer from './middlewares/ViewRegisterer/ViewRegisterer'
 class ExpressAdminArea {
 
   private static express;
-  private static router;
+  private static router: Router;
   private static databaseConnection;
   private static databaseTables;
   
-  public static init(express, databaseUri: string, databaseTables: object) {
+  public static init(express: any, databaseUri: string, databaseTables: object): Router {
     this.express = express
     this.router = express.Router()
     this.databaseConnection = new Sequelize(databaseUri)
