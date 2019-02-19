@@ -1,3 +1,5 @@
+import PostgreSQLQueryMaker from '../../QueryMaker/PostgreSQLQueryMaker'
+
 class MiddlewareRegisterer {
 
   private static ExpressAdminArea;
@@ -17,7 +19,7 @@ class MiddlewareRegisterer {
       const http = req.protocol
       const domainName = req.get('host')
       res.locals.baseUrl = `${ http }://${ domainName }/expressadminarea`
-      res.locals.databaseConnection  = this.ExpressAdminArea.databaseConnection
+      res.locals.databaseConnection = this.ExpressAdminArea.databaseConnection
       next()
     })
   }
