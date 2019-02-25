@@ -10,8 +10,8 @@ class DashboardService {
     const { dbTables } = res.locals
     res.locals.dbTable = ''
     for (let table of dbTables) {
-      const tableNameMatchesParamsPassed = (table.toLowerCase() === req.params.table.toLowerCase())
-      if (tableNameMatchesParamsPassed) {
+      const tableNameMatchesReqParams = (table.toLowerCase() === req.params.table.toLowerCase())
+      if (tableNameMatchesReqParams) {
         res.locals.dbTable = table
         break
       }
