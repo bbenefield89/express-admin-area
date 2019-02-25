@@ -1,8 +1,8 @@
 import AuthenticateAdminController from './AuthenticateAdminController/AuthenticateAdminController'
 import AuthenticateAdminService from '../services/AuthenticateAdminService/AuthenticateAdminService'
 import BaseUrlController from './BaseUrlController/BaseUrlController'
-import DashboardController from './DashboardController/DashboardController'
-import DashboardService from '../services/DashboardService/DashboardService'
+import DBTablesController from './DBTablesController/DBTablesController'
+import DBTablesService from '../services/DBTablesService/DBTablesService'
 
 class RoutesController {
 
@@ -13,7 +13,7 @@ class RoutesController {
     this.setRouter(router)
     this.registerBaseUrlRoutes()
     this.registerAuthenticateAdminRoutes()
-    this.registerDashboardRoutes()
+    this.registerDBTablesRoutes()
   }
 
   private static registerBaseUrlRoutes(): void {
@@ -27,11 +27,17 @@ class RoutesController {
     )
   }
 
-  private static registerDashboardRoutes(): void {
+  private static registerDBTablesRoutes(): void {
     this.router.get(
-      this.expressAdminArea + '/api/dashboard',
-      DashboardService.getTables,
-      DashboardController.getTables
+      this.expressAdminArea + '/api/tables',
+      DBTablesService.getTables,
+      DBTablesController.getTables
+    )
+    this.router.get(
+      this.expressAdminArea + '/api/tables/:table',
+      DBTablesService.getTables,
+      DBTablesService.getTableByName,
+      DBTablesController.getTableByName
     )
   }
 
