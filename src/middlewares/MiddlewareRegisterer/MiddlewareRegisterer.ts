@@ -1,5 +1,3 @@
-import PostgreSQLQueryMaker from '../../QueryMaker/PostgreSQLQueryMaker'
-
 class MiddlewareRegisterer {
 
   private static ExpressAdminArea;
