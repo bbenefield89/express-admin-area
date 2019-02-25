@@ -1,12 +1,7 @@
 class DashboardController {
 
-  public static getDashboard(req, res): void {
-    res.send({ databaseTables: [
-      {
-        id: 0,
-        name: 'Admins'
-      }
-    ] })
+  public static async getTables(req, res): Promise<void> {
+    res.send(res.locals.dbTables)
   }
   
 }
