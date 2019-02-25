@@ -2,6 +2,7 @@ import AuthenticateAdminController from './AuthenticateAdminController/Authentic
 import AuthenticateAdminService from '../services/AuthenticateAdminService/AuthenticateAdminService'
 import BaseUrlController from './BaseUrlController/BaseUrlController'
 import DashboardController from './DashboardController/DashboardController'
+import DashboardService from '../services/DashboardService/DashboardService'
 
 class RoutesController {
 
@@ -10,11 +11,8 @@ class RoutesController {
 
   public static registerAllRoutes(router: any): void {
     this.setRouter(router)
-    // GET: 'expressadminarea/baseurl'
     this.registerBaseUrlRoutes()
-    // GET: 'expressadminarea/authenticateadmin'
     this.registerAuthenticateAdminRoutes()
-    // GET: '/expressadminarea/dashboard'
     this.registerDashboardRoutes()
   }
 
@@ -30,7 +28,11 @@ class RoutesController {
   }
 
   private static registerDashboardRoutes(): void {
-    this.router.get(this.expressAdminArea + '/api/dashboard', DashboardController.getDashboard)
+    this.router.get(
+      this.expressAdminArea + '/api/dashboard',
+      DashboardService.getTables,
+      DashboardController.getTables
+    )
   }
 
   private static setRouter(router) {
