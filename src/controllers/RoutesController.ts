@@ -2,7 +2,6 @@ import AuthenticateAdminController from './AuthenticateAdminController/Authentic
 import AuthenticateAdminService from '../services/AuthenticateAdminService/AuthenticateAdminService'
 import BaseUrlController from './BaseUrlController/BaseUrlController'
 import DBTablesController from './DBTablesController/DBTablesController'
-import DBTablesService from '../services/DBTablesService/DBTablesService'
 
 class RoutesController {
 
@@ -29,12 +28,7 @@ class RoutesController {
 
   private static registerDBTablesRoutes(): void {
     this.router.get(this.expressAdminArea + '/api/tables', DBTablesController.getTables)
-    this.router.get(
-      this.expressAdminArea + '/api/tables/:table',
-      DBTablesService.getTables,
-      DBTablesService.getTableByName,
-      DBTablesController.getTableByName
-    )
+    this.router.get(this.expressAdminArea + '/api/tables/:table', DBTablesController.getTableByName)
   }
 
   private static setRouter(router) {
