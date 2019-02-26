@@ -1,9 +1,9 @@
 class DashboardService {
 
-  public static getTables(req, res, next) {
-    const { models } = res.locals.databaseConnection
-    res.locals.dbTables = Object.keys(models)
-    next()
+  public static getTables(dbConnection: any): Array<string> {
+    const models: Object = dbConnection.models
+    const modelsKeys: Array<string> = Object.keys(models)
+    return modelsKeys
   }
 
   public static getTableByName(req, res, next) {
