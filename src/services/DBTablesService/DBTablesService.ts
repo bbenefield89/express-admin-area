@@ -1,9 +1,9 @@
 class DashboardService {
 
   public static getTables(dbConnection: any): Array<string> {
-    const models: Object = dbConnection.models
-    const modelsKeys: Array<string> = Object.keys(models)
-    return modelsKeys
+    const tables: Array<Object> = dbConnection.models
+    const tablesKeys: Array<string> = tables.map((table: any) => table.name)
+    return tablesKeys
   }
 
   public static getTableByName(req, res, next) {
