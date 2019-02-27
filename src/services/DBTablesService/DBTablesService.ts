@@ -6,17 +6,14 @@ class DashboardService {
     return tablesKeys
   }
 
-  public static getTableByName(req, res, next) {
-    const { dbTables } = res.locals
-    res.locals.dbTable = ''
-    for (let table of dbTables) {
-      const tableNameMatchesReqParams = (table.toLowerCase() === req.params.table.toLowerCase())
-      if (tableNameMatchesReqParams) {
-        res.locals.dbTable = table
-        break
-      }
+  public static async getTableRows(dbModel): Promise<any> {
+    let dbTableRows: Object | Array<Object> = null
+    try {
+      dbTableRows = await dbModel.findAll({ attributes: { exclude: ['password'] }})
+    } catch (e) {
+      dbTableRows = { message: 'Service Unavailable', status: 503 }
     }
-    next()
+    return dbTableRows
   }
   
 }
