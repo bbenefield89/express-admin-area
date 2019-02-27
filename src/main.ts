@@ -23,6 +23,10 @@ class ExpressAdminArea {
     return this.router
   }
 
+  /**
+   * TODO: Figure out what to do with these methods below
+   *       They don't feel like they should be directly associated with the 'ExpressAdminArea' class
+   */
   private static attachTablesToDbConnection(dbTables: any): void {
     this.databaseConnection.models = [{ name: 'admin', model: Admin(this.databaseConnection) }]
     const dbTableNames: Array<String> = Object.keys(dbTables)
