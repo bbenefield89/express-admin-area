@@ -26,24 +26,18 @@ class ExpressAdminArea {
   /**
    * TODO: Figure out what to do with these methods below
    *       They don't feel like they should be directly associated with the 'ExpressAdminArea' class
+   * 
+   * TODO: Should this method return an object of database tables to make accessing specific tables via the
+   *       'req.params' object O(1) instead of an array of objects which is O(n)
    */
   private static attachTablesToDbConnection(dbTables: any): void {
-    this.databaseConnection.models = [{ name: 'admin', model: Admin(this.databaseConnection) }]
-    const dbTableNames: Array<String> = Object.keys(dbTables)
-    let i: number = 0
+    this.databaseConnection.models = { admin: Admin(this.databaseConnection) }
     for (let table in dbTables) {
-      this.databaseConnection.models.push({
-        name: this.dbTableNameLowerCased(dbTableNames[i]),
-        model: dbTables[table]
-      })
-      i++
+      const lowerCasedTableName = table.toLowerCase()
+      this.databaseConnection.models[lowerCasedTableName] = dbTables[table]
     }
   }
 
-  private static dbTableNameLowerCased(dbTableName: String): String {
-    return dbTableName.toLowerCase()
-  }
-  
 }
 
 export { ExpressAdminArea }
