@@ -11,14 +11,15 @@ class DBTablesService {
     return dbTables
   }
   
-  public static async getTableRows(dbModel): Promise<any> {
-    let dbTableRows: Object | Array<Object> = null
+  public static async getTableRows(model: any): Promise<Object | Array<Object>> {
+    let columns: Object | Array<Object> = null
     try {
-      dbTableRows = await dbModel.findAll({ attributes: { exclude: ['password'] }})
-    } catch (e) {
-      dbTableRows = { message: 'Service Unavailable', status: 503 }
+      columns = await model.findAll()
     }
-    return dbTableRows
+    catch (error) {
+      columns = { message: 'No Content', status: 204 }
+    }
+    return columns
   }
   
 }
