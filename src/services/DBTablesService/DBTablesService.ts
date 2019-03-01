@@ -16,7 +16,7 @@ class DBTablesService {
     try {
       columns = await model.findAll()
     }
-    catch (error) {
+    catch (_e) {
       columns = { message: 'No Content', status: 204 }
     }
     return columns
@@ -29,7 +29,7 @@ class DBTablesService {
       const model: any = dbModel
       row = await model.findByPk(rowPk) || row
     }
-    catch (e) {
+    catch (_e) {
       row = { message: 'Bad Request', status: 400 }
     }
     return row

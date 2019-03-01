@@ -2,7 +2,7 @@ import DBTablesService from '../../services/DBTablesService/DBTablesService'
 
 class DBTablesController {
 
-  public static getTables(req, res): void {
+  public static getTables(_req, res): void {
     const dbTables: Array<String> = DBTablesService.getTables(res.locals.databaseConnection.models)
     res.send(dbTables)
   }
