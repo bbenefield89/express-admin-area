@@ -21,6 +21,19 @@ class DBTablesService {
     }
     return columns
   }
+
+  public static async getTableRowByPk(reqParams: any, dbModel: any): Object {
+    let row: Object = { message: 'No Content', status: 204 }
+    try {
+      const rowPk: number = reqParams.pk
+      const model: any = dbModel
+      row = await model.findByPk(rowPk) || row
+    }
+    catch (e) {
+      row = { message: 'Bad Request', status: 400 }
+    }
+    return row
+  }
   
 }
 

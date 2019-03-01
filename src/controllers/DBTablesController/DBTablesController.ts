@@ -13,6 +13,13 @@ class DBTablesController {
     const rows: Object | Array<Object> = await DBTablesService.getTableRows(model)
     res.send(rows)
   }
+
+  public static async getTableRowByPk(req, res): Promise<void> {
+    const params: any | Object = req.params
+    const dbModel: Object = res.locals.databaseConnection.models[params.table]
+    let row: Object = await DBTablesService.getTableRowByPk(params, dbModel)
+    res.send(row)
+  }
   
 }
 
