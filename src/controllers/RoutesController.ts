@@ -28,7 +28,7 @@ class RoutesController {
 
   private static registerDBTablesRoutes(): void {
     this.router.get(this.expressAdminArea + '/api/tables', DBTablesController.getTables)
-    this.router.get(this.expressAdminArea + '/api/tables/:table', DBTablesController.getTableByName)
+    this.router.get(this.expressAdminArea + '/api/tables/:table', DBTablesController.getTableRows)
   }
 
   private static setRouter(router) {
