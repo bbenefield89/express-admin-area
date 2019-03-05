@@ -1,11 +1,5 @@
 class DBTablesService {
 
-  // public static getTables(dbConnection: any): Array<string> {
-  //   const tables: Array<Object> = dbConnection.models
-  //   const tablesKeys: Array<string> = tables.map((table: any) => table.name)
-  //   return tablesKeys
-  // }
-
   public static getTables(dbModels) {
     const dbTables = Object.keys(dbModels)
     return dbTables
@@ -22,7 +16,7 @@ class DBTablesService {
     return columns
   }
 
-  public static async getTableRowByPk(reqParams: any, dbModel: any): Object {
+  public static async getTableRowByPk(reqParams: any, dbModel: any): Promise<Object> {
     let row: Object = { message: 'No Content', status: 204 }
     try {
       const rowPk: number = reqParams.pk
