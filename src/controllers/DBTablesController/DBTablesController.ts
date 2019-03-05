@@ -1,3 +1,5 @@
+import { DataEncryptor } from '../../utilities/DataEncryptor/DataEncryptor'
+
 import DBTablesService from '../../services/DBTablesService/DBTablesService'
 
 class DBTablesController {
@@ -25,17 +27,16 @@ class DBTablesController {
   public static createTable() {}
 
   // Rewrite this into a service
-  public static createRow(req, res): any {
+  public static createRow(req, res): void {
     const table: any = req.params.table
     const dbModel: any = res.locals.databaseConnection.models[table]
     dbModel.create({ username: req.body.username, password: req.body.password })
-      .then(response => {
-        console.log('\n\n\n', response, '\n\n\n')
-        res.send({ user: req.body })
+      .then(async () => {
+        const password = await DataEncryptor.encrypt(req.body.password)
+        res.send({ user: password })
       })
       .catch(err => {
-        console.log('\n\n\n', err, '\n\n\n')
-        res.send({ error: 'error' })
+        res.send({ message: 'Bad Request', status: 400 })
       })
   }
   
