@@ -1,5 +1,3 @@
-import { DataEncryptor } from '../../utilities/DataEncryptor/DataEncryptor'
-
 import DBTablesService from '../../services/DBTablesService/DBTablesService'
 
 class DBTablesController {
@@ -26,18 +24,15 @@ class DBTablesController {
   // This seems like it's going to be very difficult. I'm going to hold off on this until later
   public static createTable() {}
 
-  // Rewrite this into a service
-  public static createRow(req, res): void {
+  /**
+   * TODO: Last worked on this method
+   * @see  DBTablesService.createRow
+   */
+  public static async createRow(req, res): Promise<void> {
     const table: any = req.params.table
     const dbModel: any = res.locals.databaseConnection.models[table]
-    dbModel.create({ username: req.body.username, password: req.body.password })
-      .then(async () => {
-        const password = await DataEncryptor.encrypt(req.body.password)
-        res.send({ user: password })
-      })
-      .catch(err => {
-        res.send({ message: 'Bad Request', status: 400 })
-      })
+    const newRow = await DBTablesService.createRow(req.body, dbModel)
+    res.send(newRow)
   }
   
 }

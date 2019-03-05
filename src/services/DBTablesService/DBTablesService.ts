@@ -1,3 +1,5 @@
+import { DataEncryptor } from '../../utilities/DataEncryptor/DataEncryptor'
+
 class DBTablesService {
 
   public static getTables(dbModels) {
@@ -27,6 +29,22 @@ class DBTablesService {
       row = { message: 'Bad Request', status: 400 }
     }
     return row
+  }
+
+  /**
+   * TODO: Last worked on this method
+   * @see  DBTablesController.createRow
+   */
+  public static async createRow(user: any, dbModel: any): Promise<any> {
+    let newRow = {}
+    try {
+      user.password = await DataEncryptor.encrypt(user.password)
+      newRow = await dbModel.create({ username: user.username, password: user.password })
+    }
+    catch (_e) {
+      newRow = { message: 'Bad Request', status: 400 }
+    }
+    return newRow
   }
   
 }
