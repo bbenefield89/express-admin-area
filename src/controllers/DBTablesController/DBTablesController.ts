@@ -20,6 +20,9 @@ class DBTablesController {
     let row: Object = await DBTablesService.getTableRowByPk(params, dbModel)
     res.send(row)
   }
+
+  // This seems like it's going to be very difficult. I'm going to hold off on this until later
+  public static createTable() {}
   
 }
 
