@@ -27,7 +27,10 @@ const Admin = db => {
           unique: true,
           fields: ['username']
         }
-      ]
+      ],
+      defaultScope: {
+        attributes: { exclude: ['password'] }
+      }
     }
   )
 
