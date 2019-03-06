@@ -24,10 +24,6 @@ class DBTablesController {
   // This seems like it's going to be very difficult. I'm going to hold off on this until later
   public static createTable() {}
 
-  /**
-   * TODO: Last worked on this method
-   * @see  DBTablesService.createRow
-   */
   public static async createRow(req, res): Promise<void> {
     const table: any = req.params.table
     const dbModel: any = res.locals.databaseConnection.models[table]
