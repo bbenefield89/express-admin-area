@@ -11,11 +11,13 @@ class ExpressAdminArea {
   private static express;
   private static router: Router;
   private static databaseConnection;
+  private static config: Object;
   
-  public static init(express: any, databaseUri: string, databaseTables: object): Router {
+  public static init(express: any, databaseUri: string, databaseTables: object, config: Object): Router {
     this.express = express
     this.router = express.Router()
     this.databaseConnection = new Sequelize(databaseUri)
+    this.config = config
     this.attachTablesToDbConnection(databaseTables)
     MiddlewareRegisterer.registerMiddlewares(this)
     RoutesController.registerAllRoutes(this.router)
