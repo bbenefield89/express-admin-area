@@ -29,10 +29,10 @@ class DBTablesService {
     return row
   }
 
-  public static async createRow(user: any, dbModel: any): Promise<any> {
+  public static async createRow(reqBody: object, dbModel: any): Promise<any> {
     let newRow = {}
     try {
-      newRow = await dbModel.create({ username: user.username, password: user.password })
+      newRow = await dbModel.create(reqBody)
     }
     catch (_e) {
       newRow = { message: 'Bad Request', status: 400 }
