@@ -11,9 +11,9 @@ class ExpressAdminArea {
   private static express;
   private static router: Router;
   private static databaseConnection;
-  private static config: Object;
+  private static config: object;
   
-  public static init(express: any, databaseUri: string, databaseTables: object, config: Object): Router {
+  public static init(express: any, databaseUri: string, databaseTables: object, config: object): Router {
     this.express = express
     this.router = express.Router()
     this.databaseConnection = new Sequelize(databaseUri)
@@ -35,7 +35,7 @@ class ExpressAdminArea {
   private static attachTablesToDbConnection(dbTables: any): void {
     this.databaseConnection.models = { admin: Admin(this.databaseConnection) }
     for (let table in dbTables) {
-      const lowerCasedTableName = table.toLowerCase()
+      const lowerCasedTableName: string = table.toLowerCase()
       this.databaseConnection.models[lowerCasedTableName] = dbTables[table]
     }
   }
