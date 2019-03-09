@@ -1,5 +1,4 @@
 import AuthenticateAdminController from './AuthenticateAdminController/AuthenticateAdminController'
-import AuthenticateAdminService from '../services/AuthenticateAdminService/AuthenticateAdminService'
 import BaseUrlController from './BaseUrlController/BaseUrlController'
 import DBTablesController from './DBTablesController/DBTablesController'
 
@@ -20,10 +19,7 @@ class RoutesController {
   }
 
   private static registerAuthenticateAdminRoutes(): void {
-    this.router.post(`${ this.expressAdminArea }/api/authenticateadmin`,
-      AuthenticateAdminService.authenticateAdmin,
-      AuthenticateAdminController.getAdminJwt
-    )
+    this.router.post(this.expressAdminArea + '/api/auth', AuthenticateAdminController.authAdmin)
   }
 
   private static registerDBTablesRoutes(): void {
