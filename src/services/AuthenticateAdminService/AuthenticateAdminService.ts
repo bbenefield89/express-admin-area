@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcrypt'
 import * as jwt from 'jsonwebtoken'
 
-import Admin from '../../models/Admin'
+import { Admin } from '../../models/Admin'
 
 class AuthenticateAdminService {
 
