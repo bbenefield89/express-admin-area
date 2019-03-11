@@ -1,4 +1,5 @@
 import * as bcrypt from 'bcrypt'
+import * as jwt from 'jsonwebtoken'
 
 class AuthenticateAdminController {
 
@@ -17,7 +18,16 @@ class AuthenticateAdminController {
             }
             else if (match === true) {
               const { password, ...user } = row.dataValues
-              res.send(user)
+              jwt.sign({ user }, 'expressadminarea', (err, token) => {
+                if (err) {
+                  console.log('\n\n', err, '\n\n')
+                  res.send(err)
+                }
+                else {
+                  console.log(token)
+                  res.status(200).send({ token, message: 'OK', status: 200 })
+                }
+              })
             }
             else {
               res.send('Wrong password')
