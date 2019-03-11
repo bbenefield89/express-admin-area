@@ -57,25 +57,28 @@ class AdminLogin extends Component<Props> {
   private handleSubmitAdminLoginForm = async (e: any): Promise<void> => {
     e.preventDefault()
     this.setFetchOptionsBodyProperty()
-    const authAdminResponse = await this.authenticateAdmin()
-    if (authAdminResponse.status) {
+    const authAdminResponse: any = await this.authenticateAdmin()
+    if (authAdminResponse.status !== 200) {
       await this.setErrorText()
     }
     else {
-      this.setAdminAuthenticationTokenInLocalStorage(authAdminResponse)
+      this.setAdminAuthenticationTokenInLocalStorage(authAdminResponse.token)
       this.props.checkIfAdminJwtIsSet()
     }
   }
 
   private setFetchOptionsBodyProperty: Function = (): void => {
     const { username, password }: { username: string, password: string } = this.state
-    this.fetchOptions.body = JSON.stringify({username, password })
+    this.fetchOptions.body = JSON.stringify({ username, password })
   }
 
   private authenticateAdmin = (): Promise<any> => {
     return fetch('/expressadminarea/api/auth', this.fetchOptions)
       .then(data => data.json())
       .then(data => data)
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   private setErrorText = (): void => {
