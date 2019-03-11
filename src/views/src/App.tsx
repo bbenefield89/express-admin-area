@@ -22,7 +22,7 @@ class App extends Component<any, State> {
       <React.Fragment>
         <Route path='/' render={ (props: any): any => <Navigation { ...props } /> } />
         <Route exact path='/' render={ (props: any): any => this.renderAdminLoginComponent(props) } />
-        <Route path='/dashboard' component={ Dashboard } />
+        <Route path='/tables' component={ Dashboard } />
       </React.Fragment>
     )
   }
