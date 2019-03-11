@@ -53,7 +53,11 @@ class App extends Component<any, State> {
   public checkIfAdminJwtIsSet = (): void => {
     const adminJwt: String | null = localStorage.getItem('token')
     if (adminJwt) {
-      this.checkIfUrlAndBaseUrlMatch()
+      // this.checkIfUrlAndBaseUrlMatch()
+      this.redirectUser('tables')
+    }
+    else {
+      this.redirectUser('')
     }
   }
 
@@ -63,15 +67,15 @@ class App extends Component<any, State> {
   private checkIfUrlAndBaseUrlMatch = (): void => {
     const currentUrlEqualsServersBaseUrl: Boolean = (window.location.href === this.state.baseUrl + '/')
     if (currentUrlEqualsServersBaseUrl) {
-      this.redirectUserToDashboard()
+      // this.redirectUserToDashboard()
     }
   }
 
   /**
    * redirectUserToDashboard
    */
-  private redirectUserToDashboard = (): void => {
-    this.props.history.push('/dashboard')
+  private redirectUser = (path: string): void => {
+    this.props.history.push(`/${ path }`)
   }
 
   /**
