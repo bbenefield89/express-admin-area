@@ -57,12 +57,12 @@ class AdminLogin extends Component<Props> {
   private handleSubmitAdminLoginForm = async (e: any): Promise<void> => {
     e.preventDefault()
     this.setFetchOptionsBodyProperty()
-    const { data } = await this.authenticateAdmin()
-    if (data.error) {
-      await this.setErrorText(data)
+    const authAdminResponse = await this.authenticateAdmin()
+    if (authAdminResponse.status) {
+      await this.setErrorText()
     }
     else {
-      this.setAdminAuthenticationTokenInLocalStorage(data)
+      this.setAdminAuthenticationTokenInLocalStorage(authAdminResponse)
       this.props.checkIfAdminJwtIsSet()
     }
   }
@@ -73,12 +73,13 @@ class AdminLogin extends Component<Props> {
   }
 
   private authenticateAdmin = (): Promise<any> => {
-    return fetch('/expressadminarea/api/authenticateadmin', this.fetchOptions)
+    return fetch('/expressadminarea/api/auth', this.fetchOptions)
       .then(data => data.json())
+      .then(data => data)
   }
 
-  private setErrorText = (fetchResponse: any): void => {
-    this.setState({ errorText: fetchResponse.error })
+  private setErrorText = (): void => {
+    this.setState({ errorText: 'Username & password combination is incorrect' })
   }
 
   private setAdminAuthenticationTokenInLocalStorage = (token: string): void => {
