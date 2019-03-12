@@ -30,7 +30,7 @@ class AuthenticateAdminController {
               })
             }
             else {
-              res.send('Wrong password')
+              res.status(401).send({ message: 'Unautherized', status: 401 })
             }
           })
         }
