@@ -9,6 +9,7 @@ class AdminLogin extends Component<Props> {
     username: '',
     password: '',
     errorText: '',
+    validInputDisplay: 'none'
   }
 
   private fetchOptions = {
@@ -46,6 +47,7 @@ class AdminLogin extends Component<Props> {
           />
         </form>
 
+        <p style={{ display: this.state.validInputDisplay }}>Must supply a valid username and password</p>
         <p>{ this.state.errorText }</p>
       </React.Fragment>
     )
@@ -56,9 +58,19 @@ class AdminLogin extends Component<Props> {
    */
   private handleSubmitAdminLoginForm = async (e: any): Promise<void> => {
     e.preventDefault()
-    this.setFetchOptionsBodyProperty()
-    const authAdminResponse: any = await this.authenticateAdmin()
-    if (authAdminResponse.status !== 200) {
+    if (this.state.username.length === 0 || this.state.password.length === 0) {
+      this.setState({ validInputDisplay: 'block' })
+    }
+    else {
+      this.setState({ validInputDisplay: 'none' })
+      this.setFetchOptionsBodyProperty()
+      this.authAdmin()
+    }
+  }
+
+  private authAdmin = async (): Promise<void> => {
+    const authAdminResponse: any = await this.fetchAdmin()
+    if (authAdminResponse.token === undefined) {
       await this.setErrorText()
     }
     else {
@@ -72,7 +84,7 @@ class AdminLogin extends Component<Props> {
     this.fetchOptions.body = JSON.stringify({ username, password })
   }
 
-  private authenticateAdmin = (): Promise<any> => {
+  private fetchAdmin = (): Promise<any> => {
     return fetch('/expressadminarea/api/auth', this.fetchOptions)
       .then(data => data.json())
       .then(data => data)
