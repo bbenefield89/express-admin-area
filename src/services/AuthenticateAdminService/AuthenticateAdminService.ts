@@ -1,38 +1,52 @@
 import * as bcrypt from 'bcrypt'
 import * as jwt from 'jsonwebtoken'
 
-import { Admin } from '../../models/Admin'
+interface RequestBody {
+  username: string
+  password: string
+}
+
+interface AdminModel {
+  findOne(where: object)
+}
+
+interface AdminRow {
+  password: string
+  dataValues: { password: string }
+}
 
 class AuthenticateAdminService {
 
-  public static async authenticateAdmin(req, res, next): Promise<void> {
-    res.locals.token = { error: 'Username or password combination is incorrect' }
-    const adminEntity = await AuthenticateAdminService.findAdminByUsername(req, res)
-    const passwordsMatch: Boolean = await AuthenticateAdminService.checkIfPasswordsMatch(
-      req.body.password,
-      adminEntity.password
-    )
-    if (passwordsMatch) {
-      res.locals.token = await AuthenticateAdminService.generateJwt(adminEntity)
+  public static async authAdmin(reqBody: RequestBody, AdminModel: AdminModel): Promise<object> {
+    const { username, password } = reqBody
+    const adminRow: AdminRow = await AdminModel.findOne({ where: { username } })
+    let token: object = {}
+    if (adminRow !== null) {
+      token = await AuthenticateAdminService.checkIfPasswordsMatch(password, adminRow)
     }
-    next()
+    return token
+  }
+  
+  private static async checkIfPasswordsMatch(plainPassword: string, adminRow: AdminRow): Promise<object> {
+    const isPasswordsMatch = await Promise.resolve(bcrypt.compare(plainPassword, adminRow.password))
+    if (isPasswordsMatch) {
+      const admin = AuthenticateAdminService.removePasswordPropFromAdminRow(adminRow)
+      const token: object = { token: await AuthenticateAdminService.createToken(admin) }
+      return token
+    }
+    else {
+      const emptyResponse: object = {}
+      return emptyResponse
+    }
   }
 
-  private static async findAdminByUsername(req, res): Promise<any> {
-    const databaseConnection: Object = res.locals.databaseConnection
-    const adminModel = Admin(databaseConnection)
-    const findOneWhereClause: Object = { where: { username: req.body.username }}
-    const adminEntity: Object = await adminModel.findOne(findOneWhereClause)
-    return adminEntity
+  private static removePasswordPropFromAdminRow(adminRow: AdminRow): object {
+    const { password, ...admin } = adminRow.dataValues
+    return admin
   }
 
-  private static async checkIfPasswordsMatch(plainTextPw: String, hashedPw: String): Promise<Boolean> {
-    return await bcrypt.compare(plainTextPw, hashedPw)
-  }
-
-  private static async generateJwt(adminEntity): Promise<String> {
-    const { id, username }: { id: Number, username: String } = adminEntity
-    const token: String = await jwt.sign({ id, username }, 'expressadminarea')
+  private static async createToken(admin: object): Promise<string> {
+    const token: string = await Promise.resolve(jwt.sign({ admin }, 'expressadminarea'))
     return token
   }
   
