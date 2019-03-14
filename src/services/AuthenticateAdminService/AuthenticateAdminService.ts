@@ -1,16 +1,16 @@
 import * as bcrypt from 'bcrypt'
 import * as jwt from 'jsonwebtoken'
 
-interface RequestBody {
+type RequestBody = {
   username: string
   password: string
 }
 
-interface AdminModel {
-  findOne(where: object)
+type AdminModel = {
+  findOne(where: object): AdminRow
 }
 
-interface AdminRow {
+type AdminRow = {
   password: string
   dataValues: { password: string }
 }
@@ -29,15 +29,12 @@ class AuthenticateAdminService {
   
   private static async checkIfPasswordsMatch(plainPassword: string, adminRow: AdminRow): Promise<object> {
     const isPasswordsMatch = await Promise.resolve(bcrypt.compare(plainPassword, adminRow.password))
+    let token: object = {}
     if (isPasswordsMatch) {
-      const admin = AuthenticateAdminService.removePasswordPropFromAdminRow(adminRow)
-      const token: object = { token: await AuthenticateAdminService.createToken(admin) }
-      return token
+      const admin: object = AuthenticateAdminService.removePasswordPropFromAdminRow(adminRow)
+      token = { token: await AuthenticateAdminService.createToken(admin) }
     }
-    else {
-      const emptyResponse: object = {}
-      return emptyResponse
-    }
+    return token
   }
 
   private static removePasswordPropFromAdminRow(adminRow: AdminRow): object {
