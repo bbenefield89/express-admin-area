@@ -1,12 +1,17 @@
 import AuthenticateAdminService from '../../services/AuthenticateAdminService/AuthenticateAdminService';
 
-interface RequestBody {
+type RequestBody = {
   username: string
   password: string
 }
 
-interface AdminModel {
-  findOne(where: object)
+type AdminModel = {
+  findOne(where: object): AdminRow
+}
+
+type AdminRow = {
+  password: string
+  dataValues: { password: string }
 }
 
 class AuthenticateAdminController {
