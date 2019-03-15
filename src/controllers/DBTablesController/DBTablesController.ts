@@ -1,4 +1,4 @@
-import DBTablesService from '../../services/DBTablesService/DBTablesService'
+import { DBTablesService } from '../../services/DBTablesService/DBTablesService'
 
 class DBTablesController {
 
