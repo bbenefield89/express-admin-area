@@ -15,21 +15,25 @@ type AdminRow = {
   dataValues: { password: string }
 }
 
+type Token = {
+  token?: string
+}
+
 class AuthenticateAdminService {
 
   public static async authAdmin(reqBody: RequestBody, AdminModel: AdminModel): Promise<object> {
     const { username, password } = reqBody
     const adminRow: AdminRow = await AdminModel.findOne({ where: { username } })
-    let token: { token?: string } = {}
+    let token: Token = {}
     if (adminRow !== null) {
       token = await AuthenticateAdminService.checkIfPasswordsMatch(password, adminRow)
     }
     return token
   }
   
-  private static async checkIfPasswordsMatch(plainPassword: string, adminRow: AdminRow): Promise<object> {
+  private static async checkIfPasswordsMatch(plainPassword: string, adminRow: AdminRow): Promise<Token> {
     const isPasswordsMatch = await bcrypt.compare(plainPassword, adminRow.password)
-    let token: object = {}
+    let token: Token = {}
     if (isPasswordsMatch) {
       const admin: object = AuthenticateAdminService.removePasswordPropFromAdminRow(adminRow)
       token = { token: await AuthenticateAdminService.createToken(admin) }
@@ -43,7 +47,7 @@ class AuthenticateAdminService {
   }
 
   private static async createToken(admin: object): Promise<string> {
-    const token: string = await Promise.resolve(jwt.sign({ admin }, 'expressadminarea'))
+    const token: string = jwt.sign({ admin }, 'expressadminarea')
     return token
   }
   
