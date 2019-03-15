@@ -1,7 +1,10 @@
 class DBTablesService {
 
-  public static getTables(dbModels) {
-    const dbTables = Object.keys(dbModels)
+  public static getTables(dbModels: object): string[] {
+    let dbTables: string[] = []
+    if (Object.prototype.toString.call(dbModels) === '[object Object]') {
+      dbTables = Object.keys(dbModels)
+    }
     return dbTables
   }
   
@@ -42,4 +45,4 @@ class DBTablesService {
   
 }
 
-export default DBTablesService
+export { DBTablesService }
