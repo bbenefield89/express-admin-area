@@ -20,7 +20,7 @@ class AuthenticateAdminService {
   public static async authAdmin(reqBody: RequestBody, AdminModel: AdminModel): Promise<object> {
     const { username, password } = reqBody
     const adminRow: AdminRow = await AdminModel.findOne({ where: { username } })
-    let token: object = {}
+    let token: { token?: string } = {}
     if (adminRow !== null) {
       token = await AuthenticateAdminService.checkIfPasswordsMatch(password, adminRow)
     }
@@ -28,7 +28,7 @@ class AuthenticateAdminService {
   }
   
   private static async checkIfPasswordsMatch(plainPassword: string, adminRow: AdminRow): Promise<object> {
-    const isPasswordsMatch = await Promise.resolve(bcrypt.compare(plainPassword, adminRow.password))
+    const isPasswordsMatch = await bcrypt.compare(plainPassword, adminRow.password)
     let token: object = {}
     if (isPasswordsMatch) {
       const admin: object = AuthenticateAdminService.removePasswordPropFromAdminRow(adminRow)
@@ -49,4 +49,4 @@ class AuthenticateAdminService {
   
 }
 
-export default AuthenticateAdminService
+export { AuthenticateAdminService }
