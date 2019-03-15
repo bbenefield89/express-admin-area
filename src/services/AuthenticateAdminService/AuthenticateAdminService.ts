@@ -1,5 +1,7 @@
-import * as bcrypt from 'bcrypt'
+// import * as bcrypt from 'bcrypt'
 import * as jwt from 'jsonwebtoken'
+
+import { DataEncryptor } from '../../utilities/DataEncryptor/DataEncryptor'
 
 type RequestBody = {
   username: string
@@ -32,7 +34,7 @@ class AuthenticateAdminService {
   }
   
   private static async checkIfPasswordsMatch(plainPassword: string, adminRow: AdminRow): Promise<Token> {
-    const isPasswordsMatch = await bcrypt.compare(plainPassword, adminRow.password)
+    const isPasswordsMatch: boolean = await DataEncryptor.compare(plainPassword, adminRow.password)
     let token: Token = {}
     if (isPasswordsMatch) {
       const admin: object = AuthenticateAdminService.removePasswordPropFromAdminRow(adminRow)
