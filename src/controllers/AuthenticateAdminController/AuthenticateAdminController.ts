@@ -1,4 +1,4 @@
-import AuthenticateAdminService from '../../services/AuthenticateAdminService/AuthenticateAdminService';
+import { AuthenticateAdminService } from '../../services/AuthenticateAdminService/AuthenticateAdminService';
 
 type RequestBody = {
   username: string
