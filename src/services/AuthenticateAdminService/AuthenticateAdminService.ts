@@ -1,11 +1,11 @@
-// import * as bcrypt from 'bcrypt'
 import * as jwt from 'jsonwebtoken'
 
 import { DataEncryptor } from '../../utilities/DataEncryptor/DataEncryptor'
 
 type RequestBody = {
-  username: string
-  password: string
+  username?: string
+  password?: string
+  token?: string
 }
 
 type AdminModel = {
@@ -19,6 +19,11 @@ type AdminRow = {
 
 type Token = {
   token?: string
+}
+
+type isTokenVerified = {
+  status: number
+  message: string
 }
 
 class AuthenticateAdminService {
@@ -38,7 +43,7 @@ class AuthenticateAdminService {
     let token: Token = {}
     if (isPasswordsMatch) {
       const admin: object = AuthenticateAdminService.removePasswordPropFromAdminRow(adminRow)
-      token = { token: await AuthenticateAdminService.createToken(admin) }
+      token = { token: AuthenticateAdminService.createToken(admin) }
     }
     return token
   }
@@ -48,11 +53,26 @@ class AuthenticateAdminService {
     return admin
   }
 
-  private static async createToken(admin: object): Promise<string> {
+  private static createToken(admin: object): string {
     const token: string = jwt.sign({ admin }, 'expressadminarea')
     return token
   }
-  
+
+  public static async verifyToken(token: string, AdminModel: AdminModel): Promise<isTokenVerified> {
+    let isAdminExists: isTokenVerified = { status: 404, message: 'Not Found' }
+    try {
+      const username: string = jwt.verify(token, 'expressadminarea').admin.username
+      const admin: any = await AdminModel.findOne({ where: { username } })
+      if (admin !== null) {
+        isAdminExists = { status: 200, message: 'Ok' }
+      }
+    }
+    catch (e) {
+      isAdminExists = { status: 500, message: 'Internal Server Error' }
+    }
+    return isAdminExists
+  }
+
 }
 
 export { AuthenticateAdminService }
