@@ -53,7 +53,6 @@ class App extends Component<any, State> {
   public checkIfAdminJwtIsSet = (): void => {
     const adminJwt: String | null = localStorage.getItem('token')
     if (adminJwt) {
-      // this.checkIfUrlAndBaseUrlMatch()
       this.redirectUser('tables')
     }
     else {
