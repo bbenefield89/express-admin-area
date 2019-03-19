@@ -20,6 +20,7 @@ class RoutesController {
 
   private static registerAuthenticateAdminRoutes(): void {
     this.router.post(this.expressAdminArea + '/api/auth', AuthenticateAdminController.authAdmin)
+    this.router.post(this.expressAdminArea + '/api/verify', AuthenticateAdminController.verifyToken)
   }
 
   private static registerDBTablesRoutes(): void {
