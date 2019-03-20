@@ -34,7 +34,7 @@ class AuthenticateAdminController {
     const token: string = req.body.token
     const AdminModel: AdminModel = res.locals.databaseConnection.models['admin']
     const response: ResponseBody = await AuthenticateAdminService.verifyToken(token, AdminModel)
-    res.status(response.status).send({ message: response.message, response: response.body })
+    res.status(response.status).send({ message: response.message, body: response.body })
   }
   
 }
