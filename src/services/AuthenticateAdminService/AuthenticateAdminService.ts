@@ -21,9 +21,10 @@ type Token = {
   token?: string
 }
 
-type isTokenVerified = {
+type ResponseBody = {
   status: number
   message: string
+  body: boolean
 }
 
 class AuthenticateAdminService {
@@ -58,17 +59,17 @@ class AuthenticateAdminService {
     return token
   }
 
-  public static async verifyToken(token: string, AdminModel: AdminModel): Promise<isTokenVerified> {
-    let isAdminExists: isTokenVerified = { status: 404, message: 'Not Found' }
+  public static async verifyToken(token: string, AdminModel: AdminModel): Promise<ResponseBody> {
+    let isAdminExists: ResponseBody = { status: 404, message: 'Not Found', body: false }
     try {
       const username: string = jwt.verify(token, 'expressadminarea').admin.username
       const admin: any = await AdminModel.findOne({ where: { username } })
       if (admin !== null) {
-        isAdminExists = { status: 200, message: 'Ok' }
+        isAdminExists = { status: 200, message: 'Ok', body: true }
       }
     }
     catch (e) {
-      isAdminExists = { status: 500, message: 'Internal Server Error' }
+      isAdminExists = { status: 500, message: 'Internal Server Error', body: false }
     }
     return isAdminExists
   }

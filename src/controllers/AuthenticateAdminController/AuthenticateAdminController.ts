@@ -15,9 +15,10 @@ type AdminRow = {
   dataValues: { password: string }
 }
 
-type isTokenVerified = {
+type ResponseBody = {
   status: number
   message: string
+  body: boolean
 }
 
 class AuthenticateAdminController {
@@ -32,8 +33,8 @@ class AuthenticateAdminController {
   public static async verifyToken(req, res): Promise<void> {
     const token: string = req.body.token
     const AdminModel: AdminModel = res.locals.databaseConnection.models['admin']
-    const isTokenVerified: isTokenVerified = await AuthenticateAdminService.verifyToken(token, AdminModel)
-    res.status(isTokenVerified.status).send({ isTokenVerified: isTokenVerified.message })
+    const response: ResponseBody = await AuthenticateAdminService.verifyToken(token, AdminModel)
+    res.status(response.status).send({ message: response.message, response: response.body })
   }
   
 }
