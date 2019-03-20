@@ -1,6 +1,7 @@
 import * as jwt from 'jsonwebtoken'
 
 import { DataEncryptor } from '../../utilities/DataEncryptor/DataEncryptor'
+import { TokenValidator } from '../../adapters/TokenValidator/TokenValidator'
 
 type RequestBody = {
   username?: string
@@ -62,7 +63,7 @@ class AuthenticateAdminService {
   public static async verifyToken(token: string, AdminModel: AdminModel): Promise<ResponseBody> {
     let isAdminExists: ResponseBody = { status: 404, message: 'Not Found', body: false }
     try {
-      const username: string = jwt.verify(token, 'expressadminarea').admin.username
+      const username: string = (await TokenValidator.verify(token)).admin.username
       const admin: any = await AdminModel.findOne({ where: { username } })
       if (admin !== null) {
         isAdminExists = { status: 200, message: 'Ok', body: true }
