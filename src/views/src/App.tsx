@@ -60,8 +60,7 @@ class App extends Component<any, any> {
   public verifyAdminJwt = async (): Promise<void> => {
     const response: any = await fetch('/expressadminarea/api/verify', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: localStorage.getItem('token') })
+      headers: { 'Content-Type': 'application/json', Token: `${ localStorage.getItem('token') }` }
     })
     const { body }: { body: boolean } = await response.json()
     if (body === true) {
