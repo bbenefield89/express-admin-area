@@ -50,10 +50,10 @@ class App extends Component<any, State> {
   /**
    * checkIfAdminJwtIsSet
    */
-  public checkIfAdminJwtIsSet = (): void => {
+  public checkIfAdminJwtIsSet = async (): Promise<void> => {
     const adminJwt: String | null = localStorage.getItem('token')
     if (adminJwt) {
-      this.redirectUser('tables')
+      await this.verifyAdminJwt()
     }
     else {
       this.redirectUser('')
@@ -61,12 +61,20 @@ class App extends Component<any, State> {
   }
 
   /**
-   * checkIfUrlAndBaseUrlMatch
+   * verifyAdminJwt
    */
-  private checkIfUrlAndBaseUrlMatch = (): void => {
-    const currentUrlEqualsServersBaseUrl: Boolean = (window.location.href === this.state.baseUrl + '/')
-    if (currentUrlEqualsServersBaseUrl) {
-      // this.redirectUserToDashboard()
+  public verifyAdminJwt = async (): Promise<void> => {
+    const response: any = await fetch('/expressadminarea/api/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: localStorage.getItem('token') })
+    })
+    const { isTokenVerified }: { isTokenVerified: boolean } = await response.json()
+    if (isTokenVerified === true) {
+      this.redirectUser('tables')
+    }
+    else {
+      this.redirectUser('')
     }
   }
 
