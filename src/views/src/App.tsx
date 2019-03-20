@@ -63,8 +63,8 @@ class App extends Component<any, any> {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ token: localStorage.getItem('token') })
     })
-    const { isTokenVerified }: { isTokenVerified: boolean } = await response.json()
-    if (isTokenVerified === true) {
+    const { body }: { body: boolean } = await response.json()
+    if (body === true) {
       this.redirectUser('tables')
     }
     else {
