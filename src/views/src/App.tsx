@@ -7,12 +7,7 @@ import Navigation from './components/Navigation/Navigation';
 
 import './App.css';
 
-type State = { baseUrl: String }
-class App extends Component<any, State> {
-
-  public state = {
-    baseUrl: ''
-  }
+class App extends Component<any, any> {
   
   /**
    * render
@@ -31,7 +26,6 @@ class App extends Component<any, State> {
    * componentDidMount
    */
   public async componentWillMount(): Promise<void> {
-    await this.setBaseUrl()
     this.checkIfAdminJwtIsSet()
   }
 
@@ -83,15 +77,6 @@ class App extends Component<any, State> {
    */
   private redirectUser = (path: string): void => {
     this.props.history.push(`/${ path }`)
-  }
-
-  /**
-   * setBaseUrl
-   */
-  private setBaseUrl = async (): Promise<void> => {
-    return fetch('/expressadminarea/api/baseurl')
-      .then(res => res.json())
-      .then(({ data }) => this.setState({ baseUrl: data }))
   }
 
 }
