@@ -31,7 +31,7 @@ class AuthenticateAdminController {
   }
 
   public static async verifyToken(req, res): Promise<void> {
-    const token: string = req.body.token
+    const token: string = req.get('Token')
     const AdminModel: AdminModel = res.locals.databaseConnection.models['admin']
     const response: ResponseBody = await AuthenticateAdminService.verifyToken(token, AdminModel)
     res.status(response.status).send({ message: response.message, body: response.body })
