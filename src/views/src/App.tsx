@@ -2,22 +2,22 @@ import React, { Component } from 'react';
 import { Route } from 'react-router-dom'
 
 import AdminLogin from './components/AdminLogin/AdminLogin'
-import Dashboard from './components/Dashboard/Dashboard'
+import TablesContainer from './components/TablesContainer/TablesContainer'
 import Navigation from './components/Navigation/Navigation';
 
 import './App.css';
 
 class App extends Component<any, any> {
-  
+
   /**
    * render
    */
-  render(): any  {
+  render(): any {
     return (
       <React.Fragment>
-        <Route path='/' render={ (props: any): any => <Navigation { ...props } /> } />
-        <Route exact path='/' render={ (props: any): any => this.renderAdminLoginComponent(props) } />
-        <Route path='/tables' component={ Dashboard } />
+        <Route path='/' render={(props: any): any => <Navigation {...props} />} />
+        <Route exact path='/' render={(props: any): any => this.renderAdminLoginComponent(props)} />
+        <Route path='/tables' component={TablesContainer} />
       </React.Fragment>
     )
   }
@@ -35,8 +35,8 @@ class App extends Component<any, any> {
   private renderAdminLoginComponent = (props: Object) => {
     return (
       <AdminLogin
-        { ...props }
-        checkIfAdminJwtIsSet={ this.checkIfAdminJwtIsSet }
+        {...props}
+        checkIfAdminJwtIsSet={this.checkIfAdminJwtIsSet}
       />
     )
   }
@@ -60,7 +60,7 @@ class App extends Component<any, any> {
   public verifyAdminJwt = async (): Promise<void> => {
     const response: any = await fetch('/expressadminarea/api/verify', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Token: `${ localStorage.getItem('token') }` }
+      headers: { 'Content-Type': 'application/json', Token: `${localStorage.getItem('token')}` }
     })
     const { body }: { body: boolean } = await response.json()
     if (body === true) {
@@ -75,7 +75,7 @@ class App extends Component<any, any> {
    * redirectUserToDashboard
    */
   private redirectUser = (path: string): void => {
-    this.props.history.push(`/${ path }`)
+    this.props.history.push(`/${path}`)
   }
 
 }
