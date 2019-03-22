@@ -1,5 +1,8 @@
 import { TokenValidator } from '../../../src/adapters/TokenValidator/TokenValidator'
 
+/**
+ * TODO: write more thurough tests
+ */
 let token: any = null
 
 test('sign STRING', async () => {
