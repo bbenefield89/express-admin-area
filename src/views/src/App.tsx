@@ -1,6 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { Route } from 'react-router-dom'
 
+import {
+  Table
+} from './components/index'
 import AdminLogin from './components/AdminLogin/AdminLogin'
 import TablesContainer from './components/TablesContainer/TablesContainer'
 import Navigation from './components/Navigation/Navigation';
@@ -17,7 +20,8 @@ class App extends Component<any, any> {
       <React.Fragment>
         <Route path='/' render={(props: any): any => <Navigation {...props} />} />
         <Route exact path='/' render={(props: any): any => this.renderAdminLoginComponent(props)} />
-        <Route path='/tables' component={TablesContainer} />
+        <Route exact path='/tables' component={TablesContainer} />
+        <Route path='/tables/:tableName' render={(props: any): any => <Table {...props} />} />
       </React.Fragment>
     )
   }
