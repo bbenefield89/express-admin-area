@@ -12,7 +12,7 @@ type State = {
   rows: object[]
 }
 
-class Table extends Component<Props, State> {
+class Row extends Component<Props, State> {
 
   public tableName: string = this.props.match.params.tableName
   public state = {
@@ -50,4 +50,4 @@ class Table extends Component<Props, State> {
 
 }
 
-export { Table }
+export { Row }

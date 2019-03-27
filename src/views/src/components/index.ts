@@ -1,7 +1,7 @@
 import {
-  Table
-} from './Table/Table'
+  Row
+} from './Row/Row'
 
 export {
-  Table
+  Row
 }
