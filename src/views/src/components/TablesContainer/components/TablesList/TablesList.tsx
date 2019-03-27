@@ -12,14 +12,12 @@ class TablesList extends Component {
     return (
       <React.Fragment>
         <ul>
-          {
-            this.state.tables.map((tableName: string) => (
+          {this.state.tables.map((tableName: string) => (
               <TableItem
                 key={tableName}
                 tableName={tableName}
               />
-            ))
-          }
+          ))}
         </ul>
       </React.Fragment>
     )
