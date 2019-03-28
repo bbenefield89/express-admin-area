@@ -1,51 +1,46 @@
 import React, { Component } from 'react'
 
+import { Field } from '../Field/Field'
+
 type Props = {
-  match: {
-    params: {
-      tableName: string
-    }
-  }
+  row?: any
 }
 
 type State = {
-  rows: object[]
+  fields: any[]
 }
 
 class Row extends Component<Props, State> {
 
-  public tableName: string = this.props.match.params.tableName
-  public state = {
-    rows: []
+  state = {
+    fields: []
   }
 
-  public render() {
+  render() {
     return (
-      <React.Fragment>
-        <h1>{ this.tableName[0].toLocaleUpperCase() + this.tableName.substring(1) }</h1>
-
-        {this.state.rows.map((row: { id: number, username: string, createdAt: string, updatedAt: string }) => {
-          return (
-            <ul key={row.id}>
-              {/* Break these <li> into a reusable component */}
-              <li>{row.id}</li>
-              <li>{row.username}</li>
-              <li>{row.createdAt}</li>
-              <li>{row.updatedAt}</li>
-            </ul>
-          )
-        })}
-      </React.Fragment>
+      <ul>
+        {this.renderFields()}
+      </ul>
     )
   }
 
-  public componentDidMount() {
-    const origin: string = window.location.origin
-    const tableName: string = this.props.match.params.tableName
-    fetch(origin + '/expressadminarea/api/tables/' + tableName)
-      .then(res => res.json())
-      .then(rows => this.setState({ rows }))
-      .catch(err => console.log(err))
+  componentDidMount() {
+    this.setStateFields()
+  }
+
+  public setStateFields(): void {
+    const fields: any[] = []
+    for (let key in this.props.row) {
+      fields.push(this.props.row[key])
+    }
+    this.setState({ fields })
+  }
+
+  public renderFields(): any {
+    const fields: any[] = this.state.fields.map((field: any, idx: number): any => (
+      <Field key={idx} field={field} />
+    ))
+    return fields
   }
 
 }
