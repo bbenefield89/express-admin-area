@@ -24,10 +24,8 @@ class Table extends Component<Props, State> {
   public render() {
     return (
       <React.Fragment>
-        <h1>{ this.tableName[0].toLocaleUpperCase() + this.tableName.substring(1) }</h1>
-        {this.state.rows.map((row: object, idx: number): any => (
-          <Row key={idx} row={row} />
-        ))}
+        {this.renderTableName()}
+        {this.renderRows()}
       </React.Fragment>
     )
   }
@@ -39,6 +37,21 @@ class Table extends Component<Props, State> {
       .then(res => res.json())
       .then(rows => this.setState({ rows }))
       .catch(err => console.log(err))
+  }
+
+  public renderTableName(): any {
+    const capitalizedFirstLetter: string = this.tableName[0].toLocaleUpperCase()
+    const restOfTableName: string = this.tableName.substring(1)
+    const fullTableName: string = capitalizedFirstLetter + restOfTableName
+    const tableNameElement: any = <h1>{fullTableName}</h1>
+    return tableNameElement
+  }
+  
+  public renderRows(): any {
+    const rows: any = this.state.rows.map((row: object, idx: number): any => (
+      <Row key={idx} row={row} />
+    ))
+    return rows
   }
 
 }
