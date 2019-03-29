@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 
 import { Row } from '../Row/Row'
 
@@ -48,8 +49,12 @@ class Table extends Component<Props, State> {
   }
   
   public renderRows(): any {
-    const rows: any = this.state.rows.map((row: object, idx: number): any => (
-      <Row key={idx} row={row} />
+    const rows: any = this.state.rows.map((row: { id: number }, idx: number): any => (
+      <Row key={idx} row={row}>
+        <Link to={`/tables/${this.tableName}/${row.id}`}>
+          Edit
+        </Link>
+      </Row>
     ))
     return rows
   }
