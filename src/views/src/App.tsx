@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Route } from 'react-router-dom'
 
 import {
+  Row,
   Table
 } from './components/index'
 import AdminLogin from './components/AdminLogin/AdminLogin'
@@ -21,7 +22,8 @@ class App extends Component<any, any> {
         <Route path='/' render={(props: any): any => <Navigation {...props} />} />
         <Route exact path='/' render={(props: any): any => this.renderAdminLoginComponent(props)} />
         <Route exact path='/tables' component={TablesContainer} />
-        <Route path='/tables/:tableName' render={(props: any): any => <Table {...props} />} />
+        <Route exact path='/tables/:tableName' render={(props: any): any => <Table {...props} />} />
+        <Route path='/tables/:tableName/:pk' render={(props: any): any => <Row {...props} />} />
       </React.Fragment>
     )
   }
