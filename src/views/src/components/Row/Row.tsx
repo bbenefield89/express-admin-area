@@ -33,7 +33,7 @@ class Row extends Component<Props, State> {
       this.setStateFields(this.props.row)
     }
     else if (this.props.match) {
-      fetch('/expressadminarea/api/tables/admin/162')
+      fetch(`/expressadminarea/api/${this.props.match.url}`)
         .then(res => res.json())
         .then(json => this.setStateFields(json))
         .catch(err => console.log(err))
