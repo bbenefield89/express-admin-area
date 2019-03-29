@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 
 import { Field } from '../Field/Field'
 
@@ -23,8 +22,7 @@ class Row extends Component<Props, State> {
         <ul>
           {this.renderFields()}
         </ul>
-
-        <Link to={`/api/tables/${this.props.row.id}`} data-table-pk={this.props.row.id}>Edit</Link>
+        {this.props.children}
       </React.Fragment>
     )
   }
