@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { Field } from '../Field/Field'
 
 type Props = {
+  match?: any
   row?: any
 }
 
@@ -28,13 +29,21 @@ class Row extends Component<Props, State> {
   }
 
   componentDidMount() {
-    this.setStateFields()
+    if (this.props.row) {
+      this.setStateFields(this.props.row)
+    }
+    else if (this.props.match) {
+      fetch('/expressadminarea/api/tables/admin/162')
+        .then(res => res.json())
+        .then(json => this.setStateFields(json))
+        .catch(err => console.log(err))
+    }
   }
 
-  public setStateFields(): void {
+  public setStateFields(row: any): void {
     const fields: any[] = []
-    for (let key in this.props.row) {
-      fields.push(this.props.row[key])
+    for (let key in row) {
+      fields.push(row[key])
     }
     this.setState({ fields })
   }
