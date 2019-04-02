@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 
 import { Row } from '../Row/Row'
+import { RowContainer } from '../index'
 
 type Props = {
   match: {
@@ -50,11 +51,9 @@ class Table extends Component<Props, State> {
   
   public renderRows(): any {
     const rows: any = this.state.rows.map((row: { id: number }, idx: number): any => (
-      <Row key={idx} row={row}>
-        <Link to={`/tables/${this.tableName}/${row.id}`}>
-          Edit
-        </Link>
-      </Row>
+      <RowContainer key={idx} row={row}>
+        <Row />
+      </RowContainer>
     ))
     return rows
   }
