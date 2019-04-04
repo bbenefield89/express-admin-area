@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 
-import { Row } from '../Row/Row'
-import { RowContainer } from '../index'
+import {
+  Field,
+  RowContainer,
+  RowDisplay
+} from '../index'
 
 type Props = {
   match: {
@@ -48,13 +50,13 @@ class Table extends Component<Props, State> {
     const tableNameElement: any = <h1>{fullTableName}</h1>
     return tableNameElement
   }
-  
+
   public renderRows(): any {
-    const rows: any = this.state.rows.map((row: { id: number }, idx: number): any => (
-      <RowContainer key={idx} row={row}>
-        <Row />
+    const rows: any = this.state.rows.map((row: { id: number }, idx: number): any => {
+      return <RowContainer key={idx} row={row}>
+        <Field />
       </RowContainer>
-    ))
+    })
     return rows
   }
 
