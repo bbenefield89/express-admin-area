@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 type Props = {
-  field: string | number
+  field?: string | number
 }
 
 type State = {}
