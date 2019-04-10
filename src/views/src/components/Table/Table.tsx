@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import {
-  Field,
+  FieldList,
   RowContainer,
   RowDisplay
 } from '../index'
@@ -52,9 +52,9 @@ class Table extends Component<Props, State> {
   }
 
   public renderRows(): any {
-    const rows: any = this.state.rows.map((row: { id: number }, idx: number): any => {
-      return <RowContainer key={idx} row={row}>
-        <Field />
+    const rows: any = this.state.rows.map((row: { id: number }): any => {
+      return <RowContainer key={row.id} row={row}>
+        <FieldList fields={[]} />
       </RowContainer>
     })
     return rows
