@@ -5,21 +5,19 @@ type Props = {
 }
 
 type State = {
-  fields?: any
+  fields: any
 }
 
 class RowContainer extends Component<Props, State> {
 
-  state = {
+  public state: State = {
     fields: []
   }
 
   render() {
     return (
       <React.Fragment>
-        <ul>
-          {this.renderFields()}
-        </ul>
+        {this.renderFields()}
       </React.Fragment>
     )
   }
@@ -37,10 +35,9 @@ class RowContainer extends Component<Props, State> {
   }
 
   public renderFields(): any {
+    const fields: string[] | number[] = this.state.fields
     return React.Children.map(this.props.children, (child: any): any => {
-      return this.state.fields.map((field: any): any => {
-        return React.cloneElement(child, { field })
-      })
+      return React.cloneElement(child, { fields })
     })
   }
 
