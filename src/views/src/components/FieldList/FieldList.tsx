@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
 
 import { Field } from '../index'
+import { Link } from 'react-router-dom';
 
 type Props = {
   fields: any
+  id: any
+  match: { url: string }
 }
 
 type State = {}
@@ -12,17 +15,16 @@ class FieldList extends Component<Props, State> {
 
   render() {
     return (
-      <ul>
-        {this.renderFieldListItems()}
-      </ul>
-    )
-  }
+      <React.Fragment>
+        <ul>
+          {this.props.fields.map((field: any, idx: number): any => {
+            return <Field key={idx} field={field} />
+          })}
+        </ul>
 
-  public renderFieldListItems() {
-    const fieldListItems: any = this.props.fields.map((field: any, idx: number): any => {
-      return <Field key={idx} field={field} />
-    })
-    return fieldListItems
+        <Link to={`${ this.props.match.url }/${ this.props.id }`}>Edit Row</Link>
+      </React.Fragment>
+    )
   }
 
 }
