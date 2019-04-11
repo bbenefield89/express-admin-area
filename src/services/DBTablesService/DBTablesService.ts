@@ -7,7 +7,7 @@ class DBTablesService {
     }
     return dbTables
   }
-  
+
   public static async getTableRows(model: any): Promise<Object | Array<Object>> {
     let columns: Object | Array<Object> = null
     try {
@@ -19,12 +19,12 @@ class DBTablesService {
     return columns
   }
 
-  public static async getTableRowByPk(reqParams: any, dbModel: any): Promise<Object> {
-    let row: Object = { message: 'No Content', status: 204 }
+  public static async getTableRowByPk(reqParams: any, dbModel: any): Promise<Object | Object[]> {
+    let row: Object | Object[] = { message: 'No Content', status: 204 }
     try {
       const rowPk: number = reqParams.pk
       const model: any = dbModel
-      row = await model.findByPk(rowPk) || row
+      row = await model.findAll({ where: { id: rowPk } }) || row
     }
     catch (_e) {
       row = { message: 'Bad Request', status: 400 }
@@ -42,7 +42,7 @@ class DBTablesService {
     }
     return newRow
   }
-  
+
 }
 
 export { DBTablesService }
