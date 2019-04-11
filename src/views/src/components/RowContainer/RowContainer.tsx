@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 type Props = {
+  fieldElement: any
   row?: any
 }
 
@@ -17,7 +18,10 @@ class RowContainer extends Component<Props, State> {
   render() {
     return (
       <React.Fragment>
-        {this.renderFields()}
+        {React.cloneElement(this.props.fieldElement, {
+          fields: this.state.fields,
+          id: this.props.row.id
+        })}
       </React.Fragment>
     )
   }
@@ -32,13 +36,6 @@ class RowContainer extends Component<Props, State> {
       fields.push(this.props.row[field])
     }
     this.setState({ fields })
-  }
-
-  public renderFields(): any {
-    const fields: string[] | number[] = this.state.fields
-    return React.Children.map(this.props.children, (child: any): any => {
-      return React.cloneElement(child, { fields })
-    })
   }
 
 }
