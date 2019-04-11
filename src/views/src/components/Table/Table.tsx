@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
 
 import {
-  FieldList,
-  RowContainer,
-  RowDisplay
+  RowContainer
 } from '../index'
 
 type Props = {
+  fieldElement: any
   match: {
     params: {
       tableName: string
-    }
+    },
+    url: string
   }
 }
 
@@ -28,36 +28,26 @@ class Table extends Component<Props, State> {
   public render() {
     return (
       <React.Fragment>
-        {this.renderTableName()}
-        {this.renderRows()}
+        <h1>Table</h1>
+        {this.state.rows.map((row: any, idx: number): any => {
+          return <RowContainer
+                   key={idx}
+                   fieldElement={this.props.fieldElement}
+                   row={row}
+                 />
+        })}
       </React.Fragment>
     )
   }
 
   public componentDidMount() {
     const origin: string = window.location.origin
-    const tableName: string = this.props.match.params.tableName
-    fetch(origin + '/expressadminarea/api/tables/' + tableName)
+    const url: string = this.props.match.url
+    const apiEndpoint = origin + '/expressadminarea/api/' + url
+    fetch(apiEndpoint)
       .then(res => res.json())
       .then(rows => this.setState({ rows }))
       .catch(err => console.log(err))
-  }
-
-  public renderTableName(): any {
-    const capitalizedFirstLetter: string = this.tableName[0].toLocaleUpperCase()
-    const restOfTableName: string = this.tableName.substring(1)
-    const fullTableName: string = capitalizedFirstLetter + restOfTableName
-    const tableNameElement: any = <h1>{fullTableName}</h1>
-    return tableNameElement
-  }
-
-  public renderRows(): any {
-    const rows: any = this.state.rows.map((row: { id: number }): any => {
-      return <RowContainer key={row.id} row={row}>
-        <FieldList fields={[]} />
-      </RowContainer>
-    })
-    return rows
   }
 
 }
