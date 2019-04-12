@@ -1,12 +1,16 @@
 import React, { Component } from 'react'
+import { FieldList } from '../FieldList/FieldList';
 
 type Props = {
-  fieldElement: any
-  row?: any
+  url: string
+  row: {
+    id: string | number
+    [key: string]: any
+  }
 }
 
 type State = {
-  fields: any
+  fields: any[]
 }
 
 class RowContainer extends Component<Props, State> {
@@ -18,10 +22,7 @@ class RowContainer extends Component<Props, State> {
   render() {
     return (
       <React.Fragment>
-        {React.cloneElement(this.props.fieldElement, {
-          fields: this.state.fields,
-          id: this.props.row.id
-        })}
+        <FieldList id={this.props.row.id} fields={this.state.fields} url={this.props.url} />
       </React.Fragment>
     )
   }
