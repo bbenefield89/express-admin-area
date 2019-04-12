@@ -5,7 +5,6 @@ import {
 } from '../index'
 
 type Props = {
-  fieldElement: any
   match: {
     params: {
       tableName: string
@@ -30,11 +29,13 @@ class Table extends Component<Props, State> {
       <React.Fragment>
         <h1>Table</h1>
         {this.state.rows.map((row: any, idx: number): any => {
-          return <RowContainer
-                   key={idx}
-                   fieldElement={this.props.fieldElement}
-                   row={row}
-                 />
+          return (
+            <RowContainer
+              key={idx}
+              url={this.props.match.url}
+              row={row}
+            />
+          )
         })}
       </React.Fragment>
     )
