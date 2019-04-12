@@ -2,9 +2,8 @@ import React, { Component } from 'react'
 import { Route } from 'react-router-dom'
 
 import {
-  Table,
-  FieldList,
-  FieldListEdit
+  RowEdit,
+  Table
 } from './components/index'
 import AdminLogin from './components/AdminLogin/AdminLogin'
 import TablesContainer from './components/TablesContainer/TablesContainer'
@@ -23,12 +22,8 @@ class App extends Component<any, any> {
         <Route path='/' render={(props: any): any => <Navigation {...props} />} />
         <Route exact path='/' render={(props: any): any => this.renderAdminLoginComponent(props)} />
         <Route exact path='/tables' component={TablesContainer} />
-        <Route exact path='/tables/:tableName' render={(props: any): any => (
-          <Table {...props} fieldElement={<FieldList fields={[]} {...props} />} />
-        )}/>
-        <Route path='/tables/:tableName/:pk' render={(props: any): any => (
-          <Table {...props} fieldElement={<FieldListEdit fields={[]} {...props} />} />
-        )}/>
+        <Route exact path='/tables/:tableName' render={(props: any): any => <Table {...props} />} />
+        <Route exact path='/tables/:tableName/:pk' render={(props: any): any => <RowEdit />} />
       </React.Fragment>
     )
   }
