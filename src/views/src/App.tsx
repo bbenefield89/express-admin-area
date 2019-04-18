@@ -1,20 +1,29 @@
-import React, { Component } from 'react';
-import './App.css';
+import React, { Component } from 'react'
 import { Route } from 'react-router-dom'
 
+import {
+  RowEdit,
+  Table
+} from './components/index'
 import AdminLogin from './components/AdminLogin/AdminLogin'
+import TablesContainer from './components/TablesContainer/TablesContainer'
+import Navigation from './components/Navigation/Navigation';
 
-class App extends Component {
+import './App.css';
 
-  state = {
-    baseUrl: ''
-  }
-  
-  render() {
-    this.handleCheckIfAdminJwtIsSet()
+class App extends Component<any, any> {
+
+  /**
+   * render
+   */
+  render(): any {
     return (
       <React.Fragment>
-        <Route exact path='/' component={ AdminLogin } />
+        <Route path='/' render={(props: any): any => <Navigation {...props} />} />
+        <Route exact path='/' render={(props: any): any => this.renderAdminLoginComponent(props)} />
+        <Route exact path='/tables' component={TablesContainer} />
+        <Route exact path='/tables/:tableName' render={(props: any): any => <Table {...props} />} />
+        <Route exact path='/tables/:tableName/:pk' render={(props: any): any => <RowEdit />} />
       </React.Fragment>
     )
   }
@@ -22,42 +31,59 @@ class App extends Component {
   /**
    * componentDidMount
    */
-  componentDidMount() {
-    this.handleSetServerBaseUrl()
+  public async componentWillMount(): Promise<void> {
+    this.checkIfAdminJwtIsSet()
   }
-  
+
   /**
-   * handleCheckIfAdminJwtIsSet
+   * renderAdminLoginComponent
    */
-  handleCheckIfAdminJwtIsSet = (): void => {
-    const adminJwt = localStorage.getItem('token')
-    const currentUrlEqualsServersBaseUrl = (window.location.href === this.state.baseUrl + '/')
+  private renderAdminLoginComponent = (props: Object) => {
+    return (
+      <AdminLogin
+        {...props}
+        checkIfAdminJwtIsSet={this.checkIfAdminJwtIsSet}
+      />
+    )
+  }
+
+  /**
+   * checkIfAdminJwtIsSet
+   */
+  public checkIfAdminJwtIsSet = async (): Promise<void> => {
+    const adminJwt: String | null = localStorage.getItem('token')
     if (adminJwt) {
-      if (currentUrlEqualsServersBaseUrl) {
-        window.location.href = `${ this.state.baseUrl }/dashboard`
-      }
+      await this.verifyAdminJwt()
+    }
+    else {
+      this.redirectUser('')
     }
   }
 
   /**
-   * handleSetServerBaseUrl
+   * verifyAdminJwt
    */
-  handleSetServerBaseUrl = (): void => {
-    this.handleFetchBaseUrl()
+  public verifyAdminJwt = async (): Promise<void> => {
+    const response: any = await fetch('/expressadminarea/api/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Token: `${localStorage.getItem('token')}` }
+    })
+    const { body }: { body: boolean } = await response.json()
+    if (body === true) {
+      this.redirectUser('tables')
+    }
+    else {
+      this.redirectUser('')
+    }
   }
 
   /**
-   * handleFetchBaseUrl
+   * redirectUserToDashboard
    */
-  handleFetchBaseUrl = (): void => {
-    fetch('/expressadminarea/baseurl')
-      .then(data => data.json())
-      .then(({ data }) => {
-        this.setState({ baseUrl: data })
-      })
-      .catch(() => console.log('\n\nError: "App.tsx (handleFetchBaseUrl)"'))
+  private redirectUser = (path: string): void => {
+    this.props.history.push(`/${path}`)
   }
-  
+
 }
 
 export default App;
