@@ -34,4 +34,4 @@ const Admin = db => {
   return adminModel
 }
 
-export default Admin
+export { Admin }
