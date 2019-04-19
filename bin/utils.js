@@ -30,6 +30,7 @@ async function tryToCreateNewAdmin() {
   const database = new Sequelize(databaseUrl, databaseConfig)
   const adminModel = await Admin(database)
   const adminInfo = await getAdminInfo()
+  await createTableIfNotExist(adminModel)
   const { username } = await adminModel.create(adminInfo)
   logToConsoleAdminWasSuccessfullyCreated(username)
 }
@@ -85,6 +86,14 @@ function hashSuperUsersPassword(superUserPassword) {
  */
 function exitApplication() {
   process.exit()
+}
+
+/**
+ * @summary creates the Admin table in the DB if it does not exist
+ * @return void
+ */
+async function createTableIfNotExist(model) {
+  await model.sync()
 }
 
 /**
