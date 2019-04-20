@@ -1,6 +1,14 @@
 import React, { Component } from 'react'
 
-class RowEdit extends Component {
+type Props = {
+  location: { pathname: string }
+}
+
+type State = {
+  fields: any[]
+}
+
+class RowEdit extends Component<Props, State> {
   
   public state = {
     fields: []
@@ -23,7 +31,7 @@ class RowEdit extends Component {
   }
   
   public fetchRow() {
-    fetch('/expressadminarea/api/tables/admin/162')
+    fetch(`/expressadminarea/api${ this.props.location.pathname }`)
       .then(res => res.json())
       .then(json => {
         this.setStateFields(json)
