@@ -23,7 +23,7 @@ class App extends Component<any, any> {
         <Route exact path='/' render={(props: any): any => this.renderAdminLoginComponent(props)} />
         <Route exact path='/tables' component={TablesContainer} />
         <Route exact path='/tables/:tableName' render={(props: any): any => <Table {...props} />} />
-        <Route exact path='/tables/:tableName/:pk' render={(props: any): any => <RowEdit />} />
+        <Route exact path='/tables/:tableName/:pk' render={(props: any): any => <RowEdit {...props} />} />
       </React.Fragment>
     )
   }
