@@ -1,19 +1,20 @@
-import React, { Component } from 'react'
+import React, { Component, ChangeEvent } from 'react'
 
-import { FieldEdit, FieldListEdit } from '../index'
+import { FieldEdit } from '../index'
 
 type Props = {
   location: { pathname: string }
 }
 
 type State = {
-  inputs: object
+  [key: string]: any
+  inputNames: any[]
 }
 
 class RowEdit extends Component<Props, State> {
   
-  state = {
-    inputs: []
+  state: State = {
+    inputNames: []
   }
   
   render() {
@@ -29,21 +30,40 @@ class RowEdit extends Component<Props, State> {
     this.fetchRow()
   }
 
-  public renderFormInputs() {
-    const inputs = this.state.inputs.map((field: any[]) => {
-      return <FieldEdit key={field[0]} field={field} />
-    })
-    return inputs
-  }
   
   public async fetchRow(): Promise<void> {
     fetch(`/expressadminarea/api${ this.props.location.pathname }`)
       .then(res => res.json())
-      .then(async (json: object): Promise<void> => {
-        const inputs: Array<string[]> = Object.entries(json)
-        this.setState({ inputs })
+      .then(async (json: any): Promise<void> => {
+        const foo: any = {}
+        for (let property in json) {
+          foo[property] = json[property]
+        }
+
+        const inputNames: Array<string> = Object.keys(json)
+        this.setState({ ...foo, inputNames })
       })
       .catch((err: any): void => console.log(err))
+  }
+    
+  public renderFormInputs() {
+    const inputs = this.state.inputNames.map((name: string): any => {
+      return (
+        <FieldEdit
+          key={name}
+          inputName={name}
+          value={this.state[name]}
+          handleOnChange={event => this.handleOnChange(event)}
+        />
+      )
+    })
+    return inputs
+  }
+
+  public handleOnChange(event: any): void {
+    console.log(event.target.name)
+    console.log(event.target.value)
+    this.setState({ [event.target.name]: event.target.value })
   }
 
 }
