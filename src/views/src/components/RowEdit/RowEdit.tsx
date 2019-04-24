@@ -36,14 +36,14 @@ class RowEdit extends Component<Props, State> {
     return inputs
   }
   
-  public fetchRow() {
+  public async fetchRow(): Promise<void> {
     fetch(`/expressadminarea/api${ this.props.location.pathname }`)
       .then(res => res.json())
-      .then(async (json) => {
-        const inputs: Array<any[]> = Object.entries(json)
+      .then(async (json: object): Promise<void> => {
+        const inputs: Array<string[]> = Object.entries(json)
         this.setState({ inputs })
       })
-      .catch(err => console.log(err))
+      .catch((err: any): void => console.log(err))
   }
 
 }
