@@ -1,18 +1,25 @@
 import React, { Component } from 'react'
 
 type Props = {
-  field: any
+  inputName: string
+  value: string
+  handleOnChange: (event: any) => void
 }
 
 type State = {}
 
 class FieldEdit extends Component<Props, State> {
 
-  state = {}
+  state: State = {}
   
   render() {
     return (
-      <input data-column_name={this.props.field[0]} value={this.props.field[1]} />
+      <input
+        type="text"
+        name={this.props.inputName}
+        value={this.props.value}
+        onChange={this.props.handleOnChange}
+      />
     )
   }
 
