@@ -12,14 +12,14 @@ type State = {
 }
 
 class RowEdit extends Component<Props, State> {
-  
+
   state: State = {
     inputNames: []
   }
-  
+
   render() {
     return (
-      <form>
+      <form onSubmit={e => this.handleOnSubmit(e)}>
         {this.renderFormInputs()}
         <input
           type="submit"
@@ -28,14 +28,19 @@ class RowEdit extends Component<Props, State> {
     )
   }
 
+  public handleOnSubmit(e: any): void {
+    e.preventDefault()
+    console.log(this.state)
+  }
+
   componentDidMount() {
     this.fetchRow()
   }
 
-  
+
   public async fetchRow(): Promise<void> {
     try {
-      const response: { json: Function } = await fetch(`/expressadminarea/api${ this.props.location.pathname }`)
+      const response: { json: Function } = await fetch(`/expressadminarea/api${this.props.location.pathname}`)
       const inputsData: any = await response.json()
       const inputNames: string[] = Object.keys(inputsData)
       this.setState({ ...inputsData, inputNames })
