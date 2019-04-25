@@ -28,6 +28,7 @@ class RoutesController {
     this.router.get(this.expressAdminArea + '/api/tables/:table', DBTablesController.getTableRows)
     this.router.get(this.expressAdminArea + '/api/tables/:table/:pk', DBTablesController.getTableRowByPk)
     this.router.post(this.expressAdminArea + '/api/tables/:table', DBTablesController.createRow)
+    this.router.patch(this.expressAdminArea + '/api/tables/:table/:pk', DBTablesController.updateRow)
   }
 
   private static setRouter(router) {
