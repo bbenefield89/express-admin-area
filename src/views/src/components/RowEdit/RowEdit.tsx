@@ -21,7 +21,9 @@ class RowEdit extends Component<Props, State> {
     return (
       <form>
         {this.renderFormInputs()}
-        <input type="submit" />
+        <input
+          type="submit"
+        />
       </form>
     )
   }
@@ -32,20 +34,17 @@ class RowEdit extends Component<Props, State> {
 
   
   public async fetchRow(): Promise<void> {
-    fetch(`/expressadminarea/api${ this.props.location.pathname }`)
-      .then(res => res.json())
-      .then(async (json: any): Promise<void> => {
-        const foo: any = {}
-        for (let property in json) {
-          foo[property] = json[property]
-        }
-
-        const inputNames: Array<string> = Object.keys(json)
-        this.setState({ ...foo, inputNames })
-      })
-      .catch((err: any): void => console.log(err))
+    try {
+      const response: { json: Function } = await fetch(`/expressadminarea/api${ this.props.location.pathname }`)
+      const inputsData: any = await response.json()
+      const inputNames: string[] = Object.keys(inputsData)
+      this.setState({ ...inputsData, inputNames })
+    }
+    catch (error) {
+      console.log(error)
+    }
   }
-    
+
   public renderFormInputs() {
     const inputs = this.state.inputNames.map((name: string): any => {
       return (
