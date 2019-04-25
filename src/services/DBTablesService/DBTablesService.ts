@@ -43,6 +43,29 @@ class DBTablesService {
     return newRow
   }
 
+  public static async updateRow(reqBody: any, dbModel: any): Promise<any> {
+    let updatedRow: any = null
+    try {
+      let rowFound: any = await dbModel.findByPk(reqBody.pk)
+      rowFound = DBTablesService.updateRowFields(rowFound, reqBody)
+      await rowFound.save()
+      updatedRow = 'SUCCESS'
+    }
+    catch (error) {
+      console.log(error)
+      updatedRow = 'ERROR'
+    }
+    return updatedRow
+  }
+
+  public static updateRowFields(row: any, reqBody: any): any {
+    row = row
+    for (let field in reqBody) {
+      row[field] = reqBody[field]
+    }
+    return row
+  }
+
 }
 
 export { DBTablesService }
