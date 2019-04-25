@@ -30,6 +30,16 @@ class DBTablesController {
     const newRow = await DBTablesService.createRow(req.body, dbModel)
     res.send(newRow)
   }
+
+  public static async updateRow(req, res): Promise<void> {
+    const reqBody: any = req.body
+    const pk: any = req.params.pk
+    const table: any = req.params.table
+    const dbModel: any = res.locals.databaseConnection.models[table]
+    reqBody.pk = pk
+    const foo = await DBTablesService.updateRow(reqBody, dbModel)
+    res.send(foo)
+  }
   
 }
 
