@@ -37,8 +37,8 @@ class DBTablesController {
     const table: any = req.params.table
     const dbModel: any = res.locals.databaseConnection.models[table]
     reqBody.pk = pk
-    const foo = await DBTablesService.updateRow(reqBody, dbModel)
-    res.send(foo)
+    const response = await DBTablesService.updateRow(reqBody, dbModel)
+    res.send(response)
   }
   
 }
