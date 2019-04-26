@@ -44,16 +44,15 @@ class DBTablesService {
   }
 
   public static async updateRow(reqBody: any, dbModel: any): Promise<any> {
-    let updatedRow: any = null
+    let updatedRow: any = { message: 'No Content', status: 204 }
     try {
       let rowFound: any = await dbModel.findByPk(reqBody.pk)
       rowFound = DBTablesService.updateRowFields(rowFound, reqBody)
       await rowFound.save()
-      updatedRow = 'SUCCESS'
     }
     catch (error) {
       console.log(error)
-      updatedRow = 'ERROR'
+      updatedRow = { message: 'Bad Request', status: 400 }
     }
     return updatedRow
   }
