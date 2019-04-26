@@ -30,7 +30,15 @@ class RowEdit extends Component<Props, State> {
 
   public handleOnSubmit(e: any): void {
     e.preventDefault()
-    console.log(this.state)
+    const { inputNames, ...inputsValues } = this.state
+    fetch(`/expressadminarea/api${this.props.location.pathname}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(inputsValues)
+    })
+      .then(res => res.json())
+      .then(json => console.log(json))
+      .catch(err => console.log(err))
   }
 
   componentDidMount() {
