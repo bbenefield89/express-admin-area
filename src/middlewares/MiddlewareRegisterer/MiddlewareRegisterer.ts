@@ -17,7 +17,8 @@ class MiddlewareRegisterer {
       const http = req.protocol
       const domainName = req.get('host')
       res.locals.baseUrl = `${ http }://${ domainName }/expressadminarea`
-      res.locals.databaseConnection  = this.ExpressAdminArea.databaseConnection
+      res.locals.databaseConnection = this.ExpressAdminArea.databaseConnection
+      res.locals.config = this.ExpressAdminArea.config
       next()
     })
   }

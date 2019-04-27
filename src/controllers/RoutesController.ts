@@ -1,6 +1,6 @@
 import AuthenticateAdminController from './AuthenticateAdminController/AuthenticateAdminController'
-import AuthenticateAdminService from '../services/AuthenticateAdminService/AuthenticateAdminService'
 import BaseUrlController from './BaseUrlController/BaseUrlController'
+import DBTablesController from './DBTablesController/DBTablesController'
 
 class RoutesController {
 
@@ -9,21 +9,26 @@ class RoutesController {
 
   public static registerAllRoutes(router: any): void {
     this.setRouter(router)
-    // GET: 'expressadminarea/baseurl'
     this.registerBaseUrlRoutes()
-    // GET: 'expressadminarea/authenticateadmin'
     this.registerAuthenticateAdminRoutes()
+    this.registerDBTablesRoutes()
   }
 
   private static registerBaseUrlRoutes(): void {
-    this.router.get(`${ this.expressAdminArea }/baseurl`, BaseUrlController.getDomainName)
+    this.router.get(`${ this.expressAdminArea }/api/baseurl`, BaseUrlController.getDomainName)
   }
 
   private static registerAuthenticateAdminRoutes(): void {
-    this.router.post(`${ this.expressAdminArea }/authenticateadmin`,
-      AuthenticateAdminService.authenticateAdmin,
-      AuthenticateAdminController.getAdminJwt
-    )
+    this.router.post(this.expressAdminArea + '/api/auth', AuthenticateAdminController.authAdmin)
+    this.router.post(this.expressAdminArea + '/api/verify', AuthenticateAdminController.verifyToken)
+  }
+
+  private static registerDBTablesRoutes(): void {
+    this.router.get(this.expressAdminArea + '/api/tables', DBTablesController.getTables)
+    this.router.get(this.expressAdminArea + '/api/tables/:table', DBTablesController.getTableRows)
+    this.router.get(this.expressAdminArea + '/api/tables/:table/:pk', DBTablesController.getTableRowByPk)
+    this.router.post(this.expressAdminArea + '/api/tables/:table', DBTablesController.createRow)
+    this.router.patch(this.expressAdminArea + '/api/tables/:table/:pk', DBTablesController.updateRow)
   }
 
   private static setRouter(router) {
