@@ -1,7 +1,7 @@
 # Express Admin Area
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/bbenefield89/express-admin-area/pulls)
-![Version 0.2.1](https://img.shields.io/badge/Version-0.2.1-brightgreen.svg?style=flat-square)
+![Version 0.3.1](https://img.shields.io/badge/Version-0.3.1-brightgreen.svg?style=flat-square)
 
 ## The problem
 While developers tend to live in the command line that doesn't mean everyone on the team likes to. Whether this is a non-technical member of the team or even another fellow developer.
@@ -32,9 +32,13 @@ Express Admin Area is extremely simple to use. All you need to do is
  * layer to the database layer. Using Sequelize this is not only easily achieved
  * but we can rest assured that our queries are also safe
  */
+// require our .env variables
+require('dotenv').config()
+
 const Sequelize = require('sequelize')
 
-const db = new Sequelize('postgresql://<<username>>:<<password>>@127.0.0.1:5432/express_admin_area')
+// create a connection to our DB
+const db = new Sequelize(process.env.DB_URL, { operatorAliases: false })
 
 module.exports = db
 ```
@@ -48,11 +52,12 @@ const Sequelize = require('sequelize')
 
 const db = require('../connection')
 
+// define our Electronics table
 const Electronics = db.define(
-  'electronics',
+  'electronics',  // name of our table in the DB
   {
-    name: Sequelize.STRING,
-    price: Sequelize.INTEGER
+    name: Sequelize.STRING,  // name field with a type of string
+    price: Sequelize.INTEGER  // price field with a type of integer
   }
 )
 
@@ -64,38 +69,47 @@ module.exports = Electronics
 /**
  * Lastly, after connecting our database and creating our Electronics model to store
  * information about all of our electronics, we now need to pass this information
- * to Express Admin Area through the adminAreaConfig method from Express Admin Area
+ * to ExpressAdminArea through the "init" method from ExpressAdminArea
  */
+// require our .env variables
+require('dotenv').config()
+
 // our projects dependencies: express, express-admin-area
 const express = require('express')
-const { adminAreaConfig } = require('express-admin-area')
+const ExpressAdminArea = require('express-admin-area')
 
-// this is our database reference from connection.js
 const db = require('./database/connection')
-// this is our Electronics model from Electronics.js
+// be sure to require your Sequelize models
 const Electronics = require('./database/models/Electronics')
 
 const app = express()
-const adminArea = adminAreaConfig(
-  app,           // pass Express Admin Area a reference of the app variable
-  db,            // pass in the database
-  {
-    Electronics  // pass in all database models
-  }
+
+/**
+ * Call the 'init' method from ExpressAdminArea passing in: express, databaseURI,
+ * and an object containing all of your apps Sequelize models that you would like
+ * to interact with using ExpressAdminArea
+ */
+const expressAdminArea = ExpressAdminArea.init(
+  express,  // pass a reference to your apps instance of express
+  process.env.DB_URL,  // databaseURI to your apps database
+  { Electronics }  // object containing your apps Sequelize models
 )
 
 /**
- * Tell Express you want to use the admin interface from Express Admin Area
+ * Tell your app you would like to "use" ExpressAdminArea as a middleware
+ * This will automatically create a new route at "https://myapp.com/expressadminarea"
+ * where you can sign-in and begin interacting with your database from the browser
  */
-app.use('/admin', adminArea)
+app.use(expressAdminArea)
 
+// tell your app to create your "electronics" table in the database if it does not exist
 Electronics.sync()
 
+// give your app an open port to start accepting requests from
 app.listen(3000, () => console.log('\n\nServer Online\n\n'))
-
 ```
 
-Viola, now visit `/admin` in the browser, log in, and you should be ready to manage your database from the browser.
+Viola! Now visit `https://myapp.com/expressadminarea` in your browser. Log in with your superuser credentials and you should be ready to manage your database from the browser.
 
 ## Inspiration
 Django's admin interface
