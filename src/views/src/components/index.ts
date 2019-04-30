@@ -1,3 +1,4 @@
+export { CreateNewRowForm } from './CreateNewRowForm/CreateNewRowForm'
 export { Field } from './Field/Field'
 export { FieldList } from './FieldList/FieldList'
 export { FieldEdit } from './FieldEdit/FieldEdit'
