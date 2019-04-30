@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 
-import {
-  RowContainer
-} from '../index'
+import { CreateNewRowForm, RowContainer } from '../index'
 
 type Props = {
   match: {
@@ -31,20 +29,8 @@ class Table extends Component<Props, State> {
       <React.Fragment>
         <h1>Table</h1>
 
-        <form>
-          {this.state.fields.map((field: string) => {
-            return (
-              <React.Fragment key={field}>
-                <label htmlFor={field}>
-                  {field}
-                </label>
-                <input name={field} />
-              </React.Fragment>
-            )
-          })}
-          <input type="submit" value="Create New Row" />
-        </form>
-        
+        <CreateNewRowForm fields={this.state.fields} />
+
         {this.state.rows.map((row: any, idx: number): any => {
           return (
             <RowContainer
