@@ -14,6 +14,7 @@ type Props = {
 }
 
 type State = {
+  fields: string[]
   rows: object[]
 }
 
@@ -21,6 +22,7 @@ class Table extends Component<Props, State> {
 
   public tableName: string = this.props.match.params.tableName
   public state = {
+    fields: [],
     rows: []
   }
 
@@ -28,6 +30,21 @@ class Table extends Component<Props, State> {
     return (
       <React.Fragment>
         <h1>Table</h1>
+
+        <form>
+          {this.state.fields.map((field: string) => {
+            return (
+              <React.Fragment key={field}>
+                <label htmlFor={field}>
+                  {field}
+                </label>
+                <input name={field} />
+              </React.Fragment>
+            )
+          })}
+          <input type="submit" value="Create New Row" />
+        </form>
+        
         {this.state.rows.map((row: any, idx: number): any => {
           return (
             <RowContainer
@@ -47,7 +64,10 @@ class Table extends Component<Props, State> {
     const apiEndpoint = origin + '/expressadminarea/api' + url
     fetch(apiEndpoint)
       .then(res => res.json())
-      .then(rows => this.setState({ rows }))
+      .then(rows => {
+        const fields: string[] = Object.keys(rows[0])
+        this.setState({ fields, rows })
+      })
       .catch(err => console.log(err))
   }
 
