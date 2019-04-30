@@ -44,7 +44,7 @@ class Table extends Component<Props, State> {
   public componentDidMount() {
     const origin: string = window.location.origin
     const url: string = this.props.match.url
-    const apiEndpoint = origin + '/expressadminarea/api/' + url
+    const apiEndpoint = origin + '/expressadminarea/api' + url
     fetch(apiEndpoint)
       .then(res => res.json())
       .then(rows => this.setState({ rows }))
