@@ -43,13 +43,13 @@
   "license": "MIT",
   "dependencies": {
     "@types/express": "^4.16.0",
-    "@types/sequelize": "^4.27.41",
+    "@types/sequelize": "^4.27.48",
     "bcrypt": "^3.0.2",
     "express": "^4.16.4",
     "jsonwebtoken": "^8.4.0",
     "prompt": "^1.0.0",
     "pug": "^2.0.3",
-    "sequelize": "^4.41.0",
+    "sequelize": "^5.8.0",
     "tslib": "~1.9.3"
   },
   "bin": {
