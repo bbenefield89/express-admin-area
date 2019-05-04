@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 
 type Props = {
   fields: string[]
+  routerMatch: { params: { tableName: string } }
+  createNewDbRow: any  // method
+  comp: any
 }
 
 type State = {
@@ -14,9 +17,13 @@ class CreateNewRowForm extends Component<Props, State> {
   state: State = {}
 
   render() {
+    const tableName: string = this.props.routerMatch.params.tableName
+    const createNewDbRow: any = this.props.createNewDbRow
+    const fields: string[] = this.props.fields
+    
     return (
-      <form onSubmit={e => this.handleOnSubmit(e)}>
-        {this.props.fields.map((field: string) => {
+      <form onSubmit={e => e.preventDefault()}>
+        {fields.map((field: string) => {
           return (
             <React.Fragment key={field}>
               <label htmlFor={field}>
@@ -29,29 +36,13 @@ class CreateNewRowForm extends Component<Props, State> {
             </React.Fragment>
           )
         })}
-        <input type="submit" value="Create New Row" />
+        <input
+          type="submit"
+          value="Create New Row"
+          onClick={() => createNewDbRow(this.inputFields)}
+        />
       </form>
     )
-  }
-
-  public handleOnSubmit(e: any): void {
-    e.preventDefault()
-    const inputFieldValues: object|any = {}
-    for (let prop in this.inputFields) {
-      inputFieldValues[prop] = this.inputFields[prop].value
-    }
-    fetch('/expressadminarea/api/tables/admin/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(inputFieldValues)
-    })
-      .then(res => res.json())
-      .then(json => console.log(json))
-      .catch(err => console.log(err))
-  }
-
-  public handleOnChange(event: object | any): void {
-    this.setState({ [event.target.name]: event.target.value })
   }
 
 }
