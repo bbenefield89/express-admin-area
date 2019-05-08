@@ -31,9 +31,7 @@ class Table extends Component<Props, State> {
 
         <CreateNewRowForm
           fields={this.state.fields}
-          routerMatch={this.props.match}
           createNewDbRow={this.createNewDbRow.bind(this)}
-          comp={this}
         />
 
         {this.state.rows.map((row: any, idx: number): any => {
