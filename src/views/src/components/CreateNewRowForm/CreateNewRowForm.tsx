@@ -2,14 +2,10 @@ import React, { Component } from 'react'
 
 type Props = {
   fields: string[]
-  routerMatch: { params: { tableName: string } }
-  createNewDbRow: any  // method
-  comp: any
+  createNewDbRow: (inputFields: object) => void
 }
 
-type State = {
-  [key: string]: any
-}
+type State = {}
 
 class CreateNewRowForm extends Component<Props, State> {
 
@@ -17,13 +13,12 @@ class CreateNewRowForm extends Component<Props, State> {
   state: State = {}
 
   render() {
-    const tableName: string = this.props.routerMatch.params.tableName
-    const createNewDbRow: any = this.props.createNewDbRow
+    const createNewDbRow: (inputFields: object) => void = this.props.createNewDbRow
     const fields: string[] = this.props.fields
     
     return (
       <form onSubmit={e => e.preventDefault()}>
-        {fields.map((field: string) => {
+        {fields.map((field: string): React.ReactNode => {
           return (
             <React.Fragment key={field}>
               <label htmlFor={field}>
@@ -31,7 +26,7 @@ class CreateNewRowForm extends Component<Props, State> {
               </label>
               <input
                 name={field}
-                ref={input => this.inputFields[field] = input}
+                ref={(input: HTMLInputElement): HTMLInputElement => this.inputFields[field] = input}
               />
             </React.Fragment>
           )
@@ -39,7 +34,7 @@ class CreateNewRowForm extends Component<Props, State> {
         <input
           type="submit"
           value="Create New Row"
-          onClick={() => createNewDbRow(this.inputFields)}
+          onClick={(): void => createNewDbRow(this.inputFields)}
         />
       </form>
     )
