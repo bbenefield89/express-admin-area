@@ -38,12 +38,13 @@ class Table extends Component<Props, State> {
 
         {this.shouldErrorElementRender()}
 
-        {this.state.rows.map((row: any, idx: number): any => {
+        {this.state.rows.map((row: { [key: string]: number | string }, idx: number): JSX.Element => {
           return (
             <RowContainer
               key={idx}
               url={this.props.match.url}
               row={row}
+              removeRow={this.removeRow.bind(this)}
             />
           )
         })}
@@ -54,7 +55,7 @@ class Table extends Component<Props, State> {
   public componentDidMount() {
     const origin: string = window.location.origin
     const url: string = this.props.match.url
-    const apiEndpoint = origin + '/expressadminarea/api' + url
+    const apiEndpoint: string = origin + '/expressadminarea/api' + url
     fetch(apiEndpoint)
       .then(res => res.json())
       .then(rows => {
@@ -96,6 +97,13 @@ class Table extends Component<Props, State> {
       errorElement = <p>Error</p>
     }
     return errorElement
+  }
+
+  public removeRow(id: number | string): void {
+    const rows = this.state.rows.filter((row: { id: number | string }): boolean => {
+      return row.id !== id
+    })
+    this.setState({ rows })
   }
 
 }
