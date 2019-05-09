@@ -21,9 +21,11 @@ class RowContainer extends Component<Props, State> {
 
   render() {
     return (
-      <React.Fragment>
-        <FieldList id={this.props.row.id} fields={this.state.fields} url={this.props.url} />
-      </React.Fragment>
+      <FieldList
+        id={this.props.row.id}
+        fields={this.state.fields}
+        url={this.props.url}
+      />
     )
   }
 
