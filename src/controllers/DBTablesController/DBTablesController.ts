@@ -40,6 +40,14 @@ class DBTablesController {
     const response = await DBTablesService.updateRow(reqBody, dbModel)
     res.send(response)
   }
+
+  public static async deleteRow(req, res): Promise<void> {
+    const reqBody: any = req.body
+    const table: any = req.params.table
+    const dbModel: any = res.locals.databaseConnection.models[table]
+    const response = await DBTablesService.deleteRow(reqBody, dbModel)
+    res.send(response)
+  }
   
 }
 

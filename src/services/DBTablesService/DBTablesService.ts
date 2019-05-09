@@ -65,6 +65,10 @@ class DBTablesService {
     return row
   }
 
+  public static async deleteRow(reqBody: any, dbModel: any): Promise<any> {
+    await dbModel.destroy({ where: { id: reqBody.pk }})
+  }
+
 }
 
 export { DBTablesService }
