@@ -17,7 +17,7 @@ class FieldList extends Component<Props, State> {
     return (
       <React.Fragment>
         {this.renderFieldList()}
-        {this.renderLink()}
+        {this.renderEditRowLink()}
       </React.Fragment>
     )
   }
@@ -30,7 +30,7 @@ class FieldList extends Component<Props, State> {
     </ul>
   }
 
-  public renderLink() {
+  public renderEditRowLink() {
     if (this.props.url.split('/').length === 3) {
       return <Link to={`${this.props.url}/${this.props.id}`}>Edit Row</Link>
     }
