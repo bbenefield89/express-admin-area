@@ -66,7 +66,14 @@ class DBTablesService {
   }
 
   public static async deleteRow(reqBody: any, dbModel: any): Promise<any> {
-    await dbModel.destroy({ where: { id: reqBody.pk }})
+    let response = { message: 'OK', status: 200 }
+    try {
+      await dbModel.destroy({ where: { id: reqBody.pk } })
+    }
+    catch (e) {
+      response = { message: 'Bad Request', status: 400 }
+    }
+    return response
   }
 
 }

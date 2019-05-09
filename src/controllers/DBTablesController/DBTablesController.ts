@@ -42,11 +42,11 @@ class DBTablesController {
   }
 
   public static async deleteRow(req, res): Promise<void> {
-    const reqBody: any = req.body
+    const pk: any = { pk: req.params.pk }
     const table: any = req.params.table
     const dbModel: any = res.locals.databaseConnection.models[table]
-    const response = await DBTablesService.deleteRow(reqBody, dbModel)
-    res.send(response)
+    const response: any = await DBTablesService.deleteRow(pk, dbModel)
+    res.status(response.status).send(response)
   }
   
 }
