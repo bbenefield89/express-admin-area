@@ -9,9 +9,11 @@ class DBTablesController {
 
   public static async getTableRows(req, res): Promise<void> {
     const tableName: string = req.params.table
-    const model: Object = res.locals.databaseConnection.models[tableName]
-    const rows: Object | Array<Object> = await DBTablesService.getTableRows(model)
-    res.send(rows)
+    const model: object = res.locals.databaseConnection.models[tableName]
+    const modelRawAttributes: any = new res.locals.databaseConnection.models[tableName]().rawAttributes
+    const modelFieldNames: string[] = Object.keys(modelRawAttributes)
+    const rows: object | object[] = await DBTablesService.getTableRows(model)
+    res.send({ modelFieldNames, rows })
   }
 
   public static async getTableRowByPk(req, res): Promise<void> {

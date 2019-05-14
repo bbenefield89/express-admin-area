@@ -8,8 +8,8 @@ class DBTablesService {
     return dbTables
   }
 
-  public static async getTableRows(model: any): Promise<Object | Array<Object>> {
-    let columns: Object | Array<Object> = null
+  public static async getTableRows(model: any): Promise<object | object[]> {
+    let columns: object | object[] = null
     try {
       columns = await model.findAll()
     }
