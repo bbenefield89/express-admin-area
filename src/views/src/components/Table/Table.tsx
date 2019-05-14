@@ -58,8 +58,9 @@ class Table extends Component<Props, State> {
     const apiEndpoint: string = origin + '/expressadminarea/api' + url
     fetch(apiEndpoint)
       .then(res => res.json())
-      .then(rows => {
-        const fields: string[] = Object.keys(rows[0])
+      .then(res => {
+        const fields: string[] = res.modelFieldNames
+        const rows: object[] = res.rows 
         this.setState({ fields, rows })
       })
       .catch(err => console.log(err))
