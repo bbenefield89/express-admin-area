@@ -8,6 +8,12 @@ class DBTablesService {
     return dbTables
   }
 
+  public static getTablesFieldNames(dbModel: any): string[] {
+    const modelRawAttributes: object = new dbModel().rawAttributes
+    const modelFieldNames: string[] = Object.keys(modelRawAttributes)
+    return modelFieldNames
+  }
+  
   public static async getTableRows(model: any): Promise<object | object[]> {
     let columns: object | object[] = null
     try {
