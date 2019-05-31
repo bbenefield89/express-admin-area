@@ -1,7 +1,7 @@
 # Express Admin Area
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/bbenefield89/express-admin-area/pulls)
-![Version 0.5.1](https://img.shields.io/badge/Version-0.5.1-brightgreen.svg?style=flat-square)
+![Version 0.6.0](https://img.shields.io/badge/Version-0.6.0-brightgreen.svg?style=flat-square)
 
 ## The problem
 While developers tend to live in the command line that doesn't mean everyone on the team likes to. Whether this is a non-technical member of the team or even another fellow developer.
@@ -92,7 +92,7 @@ const app = express()
 const expressAdminArea = ExpressAdminArea.init(
   express,  // pass a reference to your apps instance of express
   process.env.DB_URL,  // databaseURI to your apps database
-  { Electronics }  // object containing your apps Sequelize models
+  [{ model: Electronics }]  // array of objects containing your apps Sequelize models
 )
 
 /**
