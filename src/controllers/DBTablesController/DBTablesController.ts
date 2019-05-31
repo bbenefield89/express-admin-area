@@ -22,9 +22,6 @@ class DBTablesController {
     res.send(row)
   }
 
-  // This seems like it's going to be very difficult. I'm going to hold off on this until later
-  public static createTable() {}
-
   public static async createRow(req, res): Promise<void> {
     const table: any = req.params.table
     const dbModel: any = res.locals.databaseConnection.models[table]
@@ -49,7 +46,18 @@ class DBTablesController {
     const response: any = await DBTablesService.deleteRow(pk, dbModel)
     res.status(response.status).send(response)
   }
+
+  public static async getTableFieldNames(req, res): Promise<void> {
+    debugger
+    const table: any = req.params.table
+    const dbModel: any = res.locals.databaseConnection.models[table]
+    const tableFieldNames: any = await dbModel.describe()
+    res.status(200).send(tableFieldNames)
+  }
   
+  // This seems like it's going to be very difficult. I'm going to hold off on this until later
+  public static createTable() { }
+
 }
 
 export default DBTablesController

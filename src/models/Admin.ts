@@ -27,7 +27,14 @@ const Admin = db => {
           unique: true,
           fields: ['username']
         }
-      ]
+      ],
+      scopes: {
+        expressAdminArea: {
+          attributes: {
+            exclude: ['password']
+          }
+        }
+      }
     }
   )
 

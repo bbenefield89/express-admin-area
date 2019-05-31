@@ -17,7 +17,7 @@ class DBTablesService {
   public static async getTableRows(model: any): Promise<object | object[]> {
     let columns: object | object[] = null
     try {
-      columns = await model.findAll()
+      columns = await model.scope('expressAdminArea').findAll()
     }
     catch (_e) {
       columns = { message: 'No Content', status: 204 }
@@ -30,7 +30,7 @@ class DBTablesService {
     try {
       const rowPk: number = reqParams.pk
       const model: any = dbModel
-      row = await model.findByPk(rowPk) || row
+      row = await model.scope('expressAdminArea').findByPk(rowPk) || row
     }
     catch (_e) {
       row = { message: 'Bad Request', status: 400 }

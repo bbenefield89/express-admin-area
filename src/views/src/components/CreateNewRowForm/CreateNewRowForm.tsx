@@ -2,35 +2,28 @@ import React, { Component } from 'react'
 
 type Props = {
   fields: string[]
+  url: string
   createNewDbRow: (inputFields: object) => void
 }
 
-type State = {}
+type State = {
+  fields: string[]
+}
 
 class CreateNewRowForm extends Component<Props, State> {
 
-  inputFields: object|any = {}
-  state: State = {}
+  inputFields: object | any = {}
+  state: State = {
+    fields: []
+  }
 
   render() {
     const createNewDbRow: (inputFields: object) => void = this.props.createNewDbRow
-    const fields: string[] = this.props.fields
-    
+
     return (
       <form onSubmit={e => e.preventDefault()}>
-        {fields.map((field: string): React.ReactNode => {
-          return (
-            <React.Fragment key={field}>
-              <label htmlFor={field}>
-                {field}
-              </label>
-              <input
-                name={field}
-                ref={(input: HTMLInputElement): HTMLInputElement => this.inputFields[field] = input}
-              />
-            </React.Fragment>
-          )
-        })}
+        {this.renderFields()}
+
         <input
           type="submit"
           value="Create New Row"
@@ -38,6 +31,40 @@ class CreateNewRowForm extends Component<Props, State> {
         />
       </form>
     )
+  }
+
+  // render form method
+  public renderFields(): JSX.Element[] {
+    return this.state.fields.map((field: any): any => {
+      return <React.Fragment key={field}>
+        <label htmlFor={field}>
+          {field}
+        </label>
+
+        <input
+          name={field}
+          ref={(input: any): any => this.inputFields[field] = input}
+        />
+      </React.Fragment>
+    })
+  }
+
+  componentDidMount() {
+    this.fetchTableFieldNames()
+  }
+
+  public fetchTableFieldNames(): void {
+    fetch(`/expressadminarea/api${this.props.url}/describe`)
+      .then(res => res.json())
+      .then(fields => {
+        console.log(fields)
+        const fieldsNames: string[] = Object.keys(fields)
+        this.setState({ fields: fieldsNames }, () => {
+          debugger
+          console.log(this.state)
+        })
+      })
+      .catch(err => console.log(err))
   }
 
 }
