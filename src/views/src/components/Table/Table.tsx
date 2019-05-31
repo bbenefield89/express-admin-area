@@ -34,6 +34,7 @@ class Table extends Component<Props, State> {
         <CreateNewRowForm
           fields={this.state.fields}
           createNewDbRow={this.createNewDbRow.bind(this)}
+          url={this.props.match.url}
         />
 
         {this.shouldErrorElementRender()}
