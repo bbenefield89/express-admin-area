@@ -59,10 +59,7 @@ class CreateNewRowForm extends Component<Props, State> {
       .then(fields => {
         console.log(fields)
         const fieldsNames: string[] = Object.keys(fields)
-        this.setState({ fields: fieldsNames }, () => {
-          debugger
-          console.log(this.state)
-        })
+        this.setState({ fields: fieldsNames })
       })
       .catch(err => console.log(err))
   }

@@ -48,7 +48,6 @@ class DBTablesController {
   }
 
   public static async getTableFieldNames(req, res): Promise<void> {
-    debugger
     const table: any = req.params.table
     const dbModel: any = res.locals.databaseConnection.models[table]
     const tableFieldNames: any = await dbModel.describe()
