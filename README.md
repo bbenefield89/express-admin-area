@@ -1,7 +1,7 @@
 # Express Admin Area
 
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/bbenefield89/express-admin-area/pulls)
-![Version 0.6.2](https://img.shields.io/badge/Version-0.6.2-brightgreen.svg?style=flat-square)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)][prs_welcome]
+![Version 0.6.2][package_version]
 
 ## The problem
 While developers tend to live in the command line that doesn't mean everyone on the team likes to. Whether this is a non-technical member of the team or even another fellow developer.
@@ -10,10 +10,13 @@ While developers tend to live in the command line that doesn't mean everyone on 
 ## This solution
 Express Admin Area is a GUI in the browser for Database Administration tasks, Database Administration Interface (DBAI), that lets you and your team manage your database right from the browser.
 
+[Feel free to checkout this example repo that has the minimum requirements to use this package.][express_admin_area_example]
+
 ## Table of Contents
 
 - [Usage](#usage)
 - [Inspiration](#inspiration)
+- [Contributing](#contributing)
 - [Contributors](#contributors)
 - [LICENSE](#license)
 
@@ -21,7 +24,7 @@ Express Admin Area is a GUI in the browser for Database Administration tasks, Da
 Express Admin Area is extremely simple to use. All you need to do is
 - Install it as a dependency: `yarn add express-admin-area` or `npm install express-admin area`
 
-- [Create a super user from the command line](https://asciinema.org/a/Dp11oZs8K0vf6Xqg2J1ord2zi): `yarn run express-admin-area <<full database url>>` or `npm run express-admin-area <<full database url>>`.
+- [Create a super user from the command line][create_super_user]: `yarn run express-admin-area <<full database url>>` or `npm run express-admin-area <<full database url>>`.
 
 - Require Express Admin Area in your project and pass it a reference to your server, database using Sequelize, and an object containing the models in your database.
 
@@ -114,9 +117,22 @@ Viola! Now visit `https://myapp.com/expressadminarea` in your browser. Log in wi
 ## Inspiration
 Django's admin interface
 
+## Contributing
+A good explanaiton of how to contribute to Express Admin Area can be found in the [Contributing.md][contributingmd] file.
+
 ## Contributors
 | [<img src="https://avatars0.githubusercontent.com/u/29239201?v=4" align="center" width=100><br><b>Brandon Benefield</b> ](https://github.com/bbenefield89) |
 |------------------------------------------------------------------------------------------------------------------------------------------------------------|
 
 ## LICENSE
 MIT
+
+[contributingmd]: https://github.com/bbenefield89/express-admin-area/blob/master/.github/ISSUE_TEMPLATE.md
+
+[express_admin_area_example]: https://github.com/bbenefield89/express-admin-area-example
+
+[create_super_user]: https://asciinema.org/a/Dp11oZs8K0vf6Xqg2J1ord2zi
+
+[package_version]: https://img.shields.io/badge/Version-0.6.2-brightgreen.svg?style=flat-square
+
+[prs_welcome]: https://github.com/bbenefield89/express-admin-area/pulls
