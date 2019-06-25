@@ -4,7 +4,7 @@
 - [ ] I am pulling from my own branch and **not** a master branch
 - [ ] My branch is named appropriately: e.g. `bbenefield89/unit_tests`
 - [ ] Commit messages are detailed and reference file(s) changed
-
+- [ ] If changes were on the frontend: I made sure to build, rename `build` -> `views`, moved `./src/views/views` -> `./build/src/`
 
 ### Pull Request Description
 <!-- Short description about this pull request -->
