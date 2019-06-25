@@ -1,7 +1,7 @@
 # Express Admin Area
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)][prs_welcome]
-![Version 0.6.2][package_version]
+![Version 0.6.3][package_version]
 
 ## The problem
 While developers tend to live in the command line that doesn't mean everyone on the team likes to. Whether this is a non-technical member of the team or even another fellow developer.
@@ -133,6 +133,6 @@ MIT
 
 [create_super_user]: https://asciinema.org/a/Dp11oZs8K0vf6Xqg2J1ord2zi
 
-[package_version]: https://img.shields.io/badge/Version-0.6.2-brightgreen.svg?style=flat-square
+[package_version]: https://img.shields.io/badge/Version-0.6.3-brightgreen.svg?style=flat-square
 
 [prs_welcome]: https://github.com/bbenefield89/express-admin-area/pulls
