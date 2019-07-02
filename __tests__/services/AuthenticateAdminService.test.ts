@@ -11,12 +11,20 @@ type AdminRow = {
   dataValues: { password: string }
 }
 
+let token: any = null
+let adminModel: AdminModel = null
+
 test('authAdmin', async () => {
   const reqBody: { username: string, password: string } = { username: 'foo', password: 'foo' }
   const hashedPassword: string = await bcrypt.hash('foo', 10)
-  const adminModel: AdminModel = { findOne: (_where) => <AdminRow>{ password: hashedPassword, dataValues: { password: hashedPassword } } }
-  const token: { token?: string } = await AuthenticateAdminService.authAdmin(reqBody, adminModel)
+  adminModel = { findOne: (_where) => <AdminRow>{ password: hashedPassword, dataValues: { password: hashedPassword } } }
+  token = await AuthenticateAdminService.authAdmin(reqBody, adminModel)
   expect(typeof token).toBe('object')
   expect(typeof token.token).toBe('string')
   expect(token.token.length).toBeGreaterThan(0)
+})
+
+test('verify', async () => {
+  const reqBody: object | any = await AuthenticateAdminService.verifyToken(token.token, adminModel)
+  expect(reqBody.constructor.name).toBe('Object')
 })
