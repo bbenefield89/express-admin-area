@@ -4,8 +4,15 @@ class TokenValidator {
 
   private static secret: string = 'expressadminarea'
   
-  public static async sign(data: any): Promise<string> {
-    const token: string = await jwt.sign(data, TokenValidator.secret, { expiresIn: '1h' })
+  public static async sign(data: object): Promise<string> {
+    let token = null
+    try {
+      const generatedToken: string = await jwt.sign(data, TokenValidator.secret, { expiresIn: '1h' })
+      token = generatedToken
+    }
+    catch(e) {
+      token = { message: 'Error while authenticating', status: 500 }
+    }
     return token
   }
 
