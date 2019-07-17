@@ -24,7 +24,7 @@ test('authAdmin', async () => {
   expect(token.token.length).toBeGreaterThan(0)
 })
 
-test('verify', async () => {
+test('verifyToken', async () => {
   const reqBody: object | any = await AuthenticateAdminService.verifyToken(token.token, adminModel)
   expect(reqBody.constructor.name).toBe('Object')
 })
